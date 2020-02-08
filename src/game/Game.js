@@ -1,7 +1,9 @@
 import React from "react";
 import { Canvas } from "react-three-fiber";
-import { World } from "./World";
+import { Tiles } from "./Tiles";
 import { Camera } from "./Camera";
+import { Trees } from "./Trees";
+import { Effects } from "./Effects";
 
 export function Game() {
   return (
@@ -11,7 +13,8 @@ export function Game() {
     >
       <ambientLight />
       <Camera />
-      <World />
+      <Tiles />
+      <Trees />
       {/*<Effects />*/}
     </Canvas>
   );
