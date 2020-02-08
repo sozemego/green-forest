@@ -6,7 +6,7 @@ function App() {
     <div>
       <header style={{ textAlign: "center" }}>Green forest</header>
       <hr />
-      <div style={{ height: "100vh" }}>
+      <div style={{ height: "95vh" }}>
         <Game />
       </div>
     </div>
