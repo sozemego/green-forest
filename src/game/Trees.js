@@ -68,7 +68,7 @@ export function Trees() {
 
 function TreeGroup({ group }) {
   return (
-    <group position={[group.x, group.y, 0.0]}>
+    <group position={[group.x, group.y, 0.5]}>
       {group.trees.map((tree, index) => (
         <Tree tree={tree} key={index} />
       ))}
@@ -98,7 +98,7 @@ function Tree({ tree }) {
   });
 
   return (
-    <mesh position={[tree.x, tree.y, 0.5]} ref={mesh} rotation={[1, 0, 0]}>
+    <mesh position={[tree.x, tree.y, 0.0]} ref={mesh} rotation={[1, 0, 0]}>
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <shaderMaterial
         args={{
