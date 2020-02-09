@@ -46,7 +46,7 @@ export function Camera() {
       camera.rotateZ(-1 / 60);
     }
     if (camera.position.z < 1) {
-      camera.position.z = 1;
+      // camera.position.z = 1;
     }
   });
 

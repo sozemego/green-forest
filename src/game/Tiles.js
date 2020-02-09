@@ -86,7 +86,7 @@ function TileLayer({ tiles }) {
 
   return (
     <instancedMesh ref={mesh} args={[null, null, tiles.length]}>
-      <boxBufferGeometry attach="geometry" args={[1, 1, 0.1]}>
+      <boxBufferGeometry attach="geometry" args={[1, 1, 0.01]}>
         <instancedBufferAttribute
           ref={attribute}
           attachObject={["attributes", "color"]}

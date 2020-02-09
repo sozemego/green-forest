@@ -16,12 +16,12 @@ export const WindShader = {
     "uniform sampler2D texture1;",
     "varying vec2 vUv;",
     "uniform float time;",
-    "vec2 SineWave( vec2 p ) {",
+    "vec2 Wave( vec2 p ) {",
     "    float x = cos(6.28 * time) * 0.025 * p.y;",
     "    return vec2(p.x + x, p.y);",
     "}",
     "void main(){",
-    "  gl_FragColor = texture2D(texture1, SineWave(vUv));",
+    "  gl_FragColor = texture2D(texture1, Wave(vUv));",
     "}"
   ].join("\n")
 };

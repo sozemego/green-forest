@@ -61,6 +61,76 @@ export function Trees() {
 }
 
 function TreeGroup({ group }) {
+  // let mesh = useRef();
+  // let uniforms = cloneUniforms(WindShader.uniforms);
+  // let time = useRef(0);
+  // uniforms["texture1"] = {
+  //   type: "t",
+  //   value: group.texture
+  // };
+  //
+  // useFrame((state, delta) => {
+  //   time.current += delta;
+  //   if (time.current >= 1) {
+  //     time.current = 0;
+  //   }
+  //   uniforms["time"] = {
+  //     type: "f",
+  //     value: time.current
+  //   };
+  // });
+  //
+  // let attribute = useRef();
+  // let colorArray = useMemo(() => {
+  //   let color = new Color("white");
+  //   let array = new Float32Array(group.trees.length * 3);
+  //   for (let i = 0; i < group.trees.length; i++) {
+  //     color.toArray(array, i * 3);
+  //   }
+  //   return array;
+  // }, []);
+  //
+  // let _object = useMemo(() => new Object3D(), []);
+  // useFrame(state => {
+  //   let { trees, x, y } = group;
+  //   for (let i = 0; i < trees.length; i++) {
+  //     let tree = trees[i];
+  //     _object.position.set(x, y, 15);
+  //     _object.updateMatrix();
+  //     mesh.current.setMatrixAt(i, _object.matrix);
+  //   }
+  //   mesh.current.instanceMatrix.needsUpdate = true;
+  // });
+
+  // return (
+  //   <instancedMesh args={[null, null, 5]} ref={mesh}>
+  //     <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"}>
+  //       <instancedBufferAttribute
+  //         ref={attribute}
+  //         attachObject={["attributes", "color"]}
+  //         args={[colorArray, 3]}
+  //       />
+  //     </planeBufferGeometry>
+  //     {/*<shaderMaterial*/}
+  //     {/*  args={{*/}
+  //     {/*    uniforms,*/}
+  //     {/*    vertexShader: WindShader.vertexShader,*/}
+  //     {/*    fragmentShader: WindShader.fragmentShader*/}
+  //     {/*  }}*/}
+  //     {/*  attach={"material"}*/}
+  //     {/*  opacity={1}*/}
+  //     {/*  transparent={true}*/}
+  //     {/*  needsUpdate={true}*/}
+  //     {/*/>*/}
+  //     <meshStandardMaterial
+  //       attach="material"
+  //       vertexColors={VertexColors}
+  //       map={group.texture}
+  //       opacity={1}
+  //       transparent={true}
+  //     />
+  //   </instancedMesh>
+  // );
   return (
     <group position={[group.x, group.y, 0.1]} renderOrder={1}>
       {group.trees.map((tree, index) => (
