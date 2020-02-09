@@ -49,7 +49,7 @@ export function Trees() {
       }
     }
     return groups;
-  }, []);
+  }, [sizeX, sizeY, texture, texture1]);
 
   return (
     <>

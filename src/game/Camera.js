@@ -6,7 +6,7 @@ export function Camera() {
   useEffect(() => {
     window.addEventListener("keydown", event => keys.add(event.key));
     window.addEventListener("keyup", event => keys.delete(event.key));
-  }, []);
+  }, [keys]);
 
   useFrame(({ camera }) => {
     if (keys.has("e")) {

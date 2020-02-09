@@ -36,7 +36,7 @@ export function Tiles() {
       }
     }
     return tiles;
-  }, []);
+  }, [sizeX, sizeY, textures]);
 
   return (
     <>
@@ -69,7 +69,7 @@ function TileLayer({ tiles }) {
       _color.toArray(arr, i * 3);
     }
     return arr;
-  }, []);
+  }, [_color, colors, tiles.length]);
 
   let _object = useMemo(() => new Object3D(), []);
 
