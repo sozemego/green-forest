@@ -1,11 +1,5 @@
 import React, { useMemo, useRef } from "react";
-import {
-  Mesh,
-  Object3D,
-  PlaneBufferGeometry,
-  ShaderMaterial,
-  TextureLoader
-} from "three";
+import { TextureLoader } from "three";
 import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
 import { WindShader } from "./WindShader";
 import { useFrame } from "react-three-fiber";
@@ -28,21 +22,21 @@ export function Trees() {
     let treeDensity = 0.025;
     let groups = [];
     for (let x = 0; x < sizeX; x++) {
-      for (let y = 0; y < sizeY; y++) {
+      for (let y = sizeY - 1; y >= 0; y--) {
         if (Math.random() >= treeDensity) {
           continue;
         }
         let group = {
           x,
-          y,
+          y: y + 0.25,
           trees: []
         };
         let positions = [
-          [-0.25, -0.25],
-          [0.25, -0.25],
-          [0, 0],
           [-0.25, 0.25],
-          [0.25, 0.25]
+          [0.25, 0.25],
+          [0, 0],
+          [-0.25, -0.25],
+          [0.25, -0.25]
         ];
         for (let i = 0; i < 5; i++) {
           group.trees.push({
@@ -68,7 +62,7 @@ export function Trees() {
 
 function TreeGroup({ group }) {
   return (
-    <group position={[group.x, group.y, 0.5]}>
+    <group position={[group.x, group.y, 0.1]} renderOrder={1}>
       {group.trees.map((tree, index) => (
         <Tree tree={tree} key={index} />
       ))}
@@ -98,7 +92,7 @@ function Tree({ tree }) {
   });
 
   return (
-    <mesh position={[tree.x, tree.y, 0.0]} ref={mesh} rotation={[1, 0, 0]}>
+    <mesh position={[tree.x, tree.y, 0.0]} ref={mesh} rotation={[0, 0, 0]}>
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <shaderMaterial
         args={{
