@@ -10,10 +10,10 @@ export function Camera() {
 
   useFrame(({ camera }) => {
     if (keys.has("e")) {
-      camera.position.z -= 1;
+      camera.position.z -= 2;
     }
     if (keys.has("q")) {
-      camera.position.z += 1;
+      camera.position.z += 2;
     }
     if (keys.has("a")) {
       camera.position.x -= 1;

@@ -8,7 +8,7 @@ export function Game() {
   return (
     <Canvas
       style={{ backgroundColor: "black" }}
-      camera={{ position: [50, 50, 25] }}
+      camera={{ position: [50, 50, 50], fov: 25, near: 0.1, far: 10000 }}
     >
       <ambientLight />
       <Camera />
