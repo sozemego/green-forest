@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import { TextureLoader } from "three";
 import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
-import { WindShader } from "./WindShader";
+import { WindShader } from "./shaders/WindShader";
 import { useFrame } from "react-three-fiber";
 
 export function Trees() {
@@ -29,7 +29,8 @@ export function Trees() {
         let group = {
           x,
           y: y + 0.25,
-          trees: []
+          trees: [],
+          texture: Math.random() < 0.5 ? texture : texture1
         };
         let positions = [
           [-0.25, 0.25],
@@ -41,8 +42,7 @@ export function Trees() {
         for (let i = 0; i < 5; i++) {
           group.trees.push({
             x: positions[i][0],
-            y: positions[i][1],
-            texture: Math.random() < 0.5 ? texture : texture1
+            y: positions[i][1]
           });
         }
         groups.push(group);
@@ -64,20 +64,20 @@ function TreeGroup({ group }) {
   return (
     <group position={[group.x, group.y, 0.1]} renderOrder={1}>
       {group.trees.map((tree, index) => (
-        <Tree tree={tree} key={index} />
+        <Tree tree={tree} key={index} texture={group.texture} />
       ))}
     </group>
   );
 }
 
-function Tree({ tree }) {
+function Tree({ tree, texture }) {
   let mesh = useRef();
   let shader = WindShader;
   let uniforms = cloneUniforms(shader.uniforms);
   let time = useRef(0);
   uniforms["texture1"] = {
     type: "t",
-    value: tree.texture
+    value: texture
   };
 
   useFrame((state, delta) => {
@@ -101,7 +101,6 @@ function Tree({ tree }) {
           fragmentShader: shader.fragmentShader
         }}
         attach={"material"}
-        map={tree.texture}
         opacity={1}
         transparent={true}
         needsUpdate={true}
