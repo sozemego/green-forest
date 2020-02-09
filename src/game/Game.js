@@ -3,6 +3,7 @@ import { Canvas } from "react-three-fiber";
 import { Tiles } from "./Tiles";
 import { Camera } from "./Camera";
 import { Trees } from "./Trees";
+import { Buildings } from "./Buildings";
 
 export function Game() {
   return (
@@ -14,6 +15,7 @@ export function Game() {
       <Camera />
       <Tiles />
       <Trees />
+      <Buildings />
       {/*<Effects />*/}
     </Canvas>
   );
