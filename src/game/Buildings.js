@@ -1,6 +1,5 @@
 import React, { useMemo, useRef } from "react";
-import { MeshBasicMaterial, TextureLoader } from "three";
-import { WindShader } from "./shaders/WindShader";
+import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 
 export function Buildings() {
