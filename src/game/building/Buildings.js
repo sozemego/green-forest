@@ -1,21 +1,23 @@
-import React, { useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
+import { useService } from "@xstate/react/lib";
+import {
+  BUILDINGS_ACTIONS,
+  buildingsService,
+  buildingsState
+} from "./BuildingsMachine";
+import { getBuildingData } from "./selectors";
 
 export function Buildings() {
-  let centerTexture = useMemo(
-    () => new TextureLoader().load("textures/castle_large.png"),
-    []
-  );
-  let buildings = useMemo(() => {
-    let x = 50;
-    let y = 50;
-    let center = {
-      x,
-      y,
-      texture: centerTexture
-    };
-    return [center];
+  let [state, send] = useService(buildingsService);
+  let buildings = state.context.buildings;
+  console.log(buildingsService);
+
+  useEffect(() => {
+    buildingsState.buildings.forEach(building => {
+      send({ type: BUILDINGS_ACTIONS.BUILDING_CREATED, data: building });
+    });
   }, []);
 
   return (
@@ -28,7 +30,7 @@ export function Buildings() {
 }
 
 export function Building({ building }) {
-  let { x, y, texture } = building;
+  let { x, y, textureName } = getBuildingData(building.ref);
   let mesh = useRef();
   let time = useRef(0);
   useFrame((state, delta) => {
@@ -37,6 +39,10 @@ export function Building({ building }) {
       time.current = 0;
     }
   });
+
+  let texture = useMemo(() => new TextureLoader().load(textureName), [
+    textureName
+  ]);
 
   return (
     <mesh
