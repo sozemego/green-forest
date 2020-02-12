@@ -47,7 +47,7 @@ export function Building({ building }) {
 
   return (
     <mesh
-      position={[x, y, 0.5]}
+      position={[x, y, 0.01]}
       ref={mesh}
       rotation={[0, 0, 0]}
       renderOrder={5}
