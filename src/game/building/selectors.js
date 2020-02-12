@@ -1,3 +1,3 @@
-export function getBuildingData(service) {
-  return service.state.context;
+export function getBuildingData(state) {
+  return state.context;
 }
