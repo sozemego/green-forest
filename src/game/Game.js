@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Canvas } from "react-three-fiber";
 import { Tiles } from "./Tiles";
 import { Camera } from "./Camera";
-import { Trees } from "./Trees";
 import { Buildings } from "./building/Buildings";
+import { initialResources, startResources } from "./resource/ResourcesMachine";
+import { Resources } from "./resource/Resources";
 
 export function Game() {
+  useEffect(() => {
+    startResources(initialResources);
+  }, []);
   return (
     <Canvas
       style={{ backgroundColor: "black" }}
@@ -14,7 +18,7 @@ export function Game() {
       <ambientLight />
       <Camera />
       <Tiles />
-      <Trees />
+      <Resources />
       <Buildings />
       {/*<Effects />*/}
     </Canvas>
