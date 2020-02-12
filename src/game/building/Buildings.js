@@ -8,7 +8,6 @@ import {
   buildingsState
 } from "./BuildingsMachine";
 import { getBuildingData } from "./selectors";
-import { BUILDING_ACTIONS } from "./BuildingMachine";
 
 export function Buildings() {
   let [state, send] = useService(buildingsService);
@@ -18,7 +17,7 @@ export function Buildings() {
     buildingsState.buildings.forEach(building => {
       send({ type: BUILDINGS_ACTIONS.BUILDING_CREATED, data: building });
     });
-  }, []);
+  }, [send]);
 
   return (
     <>
@@ -30,7 +29,7 @@ export function Buildings() {
 }
 
 export function Building({ building }) {
-  let [state, send] = useService(building.ref);
+  let [state] = useService(building.ref);
   let { x, y, textureName } = getBuildingData(state);
 
   let mesh = useRef();
@@ -52,7 +51,6 @@ export function Building({ building }) {
       ref={mesh}
       rotation={[0, 0, 0]}
       renderOrder={5}
-      onPointerUp={() => send(BUILDING_ACTIONS.MOVE)}
     >
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <meshBasicMaterial

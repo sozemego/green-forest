@@ -1,11 +1,6 @@
 import { assign, interpret, Machine, spawn } from "xstate";
 import { buildingMachine } from "./BuildingMachine";
 
-function moveBuilding(building) {
-  building.x += 1;
-  building.y += 1;
-}
-
 export let buildingsState = {
   buildings: [
     {
