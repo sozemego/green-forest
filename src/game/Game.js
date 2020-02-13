@@ -5,10 +5,13 @@ import { Camera } from "./Camera";
 import { Buildings } from "./building/Buildings";
 import { initialResources, startResources } from "./resource/ResourcesMachine";
 import { Resources } from "./resource/Resources";
+import { addPops, initialPops } from "./population/PopulationMachine";
+import { Population } from "./population/Population";
 
 export function Game() {
   useEffect(() => {
     startResources(initialResources);
+    addPops(initialPops);
   }, []);
   return (
     <Canvas
@@ -20,6 +23,7 @@ export function Game() {
       <Tiles />
       <Resources />
       <Buildings />
+      <Population />
       {/*<Effects />*/}
     </Canvas>
   );
