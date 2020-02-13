@@ -1,8 +1,8 @@
 import React, { useMemo, useRef } from "react";
-import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
-import { WindShader } from "./shaders/WindShader";
-import { useFrame } from "react-three-fiber";
 import { TextureLoader } from "three";
+import { useFrame } from "react-three-fiber";
+import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
+import { WindShader } from "../shaders/WindShader";
 
 export function Trees({ trees }) {
   let groups = useMemo(() => {

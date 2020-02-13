@@ -1,11 +1,17 @@
 import React, { useMemo } from "react";
 import { useService } from "@xstate/react/lib";
 import { resourceService } from "./ResourcesMachine";
-import { Trees } from "../Trees";
+import { Trees } from "./Trees";
+import { Rocks } from "./Rocks";
 
 export function Resources() {
   let [state] = useService(resourceService);
   let resources = state.context.resources;
+
+  let rocks = useMemo(
+    () => resources.filter(({ type }) => type === "stone" || type === "iron"),
+    [resources]
+  );
 
   let trees = useMemo(
     () => resources.filter(resource => resource.type === "tree"),
@@ -14,6 +20,7 @@ export function Resources() {
 
   return (
     <>
+      <Rocks rocks={rocks} />
       <Trees trees={trees} />
     </>
   );
