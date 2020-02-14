@@ -29,7 +29,6 @@ export function Population() {
 function updateWorker(pop) {
   let { ref } = pop;
   let state = getCurrentState(ref.state.value);
-  console.log(state);
 
   if (state === POP_STATE.IDLE) {
     return ref.send(POP_ACTION.START_WORKING);
