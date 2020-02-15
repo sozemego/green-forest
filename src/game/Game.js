@@ -6,7 +6,7 @@ import { Buildings } from "./building/Buildings";
 import { initialResources, startResources } from "./resource/ResourcesMachine";
 import { Resources } from "./resource/Resources";
 import { addPops, initialPops } from "./population/PopulationMachine";
-import { Population } from "./population/Population";
+import { PopulationComponent } from "./population/PopulationComponent";
 
 export function Game() {
   useEffect(() => {
@@ -23,7 +23,7 @@ export function Game() {
       <Tiles />
       <Resources />
       <Buildings />
-      <Population />
+      <PopulationComponent />
       {/*<Effects />*/}
     </Canvas>
   );

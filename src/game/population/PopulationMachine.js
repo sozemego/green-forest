@@ -1,5 +1,6 @@
 import { assign, interpret, Machine, spawn } from "xstate";
 import { popMachine } from "./PopMachine";
+import { Pop } from "./Pop";
 
 export let POPULATION_STATE = {
   IDLE: "IDLE"
@@ -34,10 +35,10 @@ let machine = Machine(
         return {
           pops: [
             ...pops,
-            {
-              id: nextId,
-              ref: spawn(popMachine.withContext(event.data), `pop-${nextId}`)
-            }
+            new Pop(
+              nextId,
+              spawn(popMachine.withContext(event.data), `pop-${nextId}`)
+            )
           ]
         };
       })
