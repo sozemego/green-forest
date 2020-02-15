@@ -75,7 +75,7 @@ export class Pop {
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.WORKING}`) {
       let { progress } = this.job;
-      if (progress < 5) {
+      if (progress < 1) {
         this.workProgress(progress + delta);
       } else {
         this.rest();

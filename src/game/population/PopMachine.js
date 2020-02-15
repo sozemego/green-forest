@@ -75,10 +75,12 @@ let popMachine = Machine({
     x: 0,
     y: 0,
     textureName: null,
-    job: null
+    job: null,
+    target: null
   },
   states: {
     [POP_STATE.IDLE]: {
+      entry: assign({ job: null, target: null }),
       on: {
         [POP_ACTION.ASSIGN_JOB]: {
           actions: assign({ job: (context, event) => event.data }),
