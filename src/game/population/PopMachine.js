@@ -1,44 +1,93 @@
 import { assign, Machine } from "xstate";
 
-export let POP_STATE = {
+let POP_STATE = {
   IDLE: "IDLE",
-  WORKING: "WORKING"
+  JOB: "JOB"
 };
 
-export let POP_ACTION = {
-  START_WORKING: "START_WORKING",
+let POP_ACTION = {
+  ASSIGN_JOB: "ASSIGN_JOB",
   REST: "REST",
   MOVE: "MOVE"
 };
 
-export let POP_WORKING_STATE = {
+let POP_JOB_STATE = {
   IDLE: "IDLE",
   SEARCHING: "SEARCHING",
-  GOING_TO_TARGET: "GOING_TO_TARGET"
+  GOING_TO_TARGET: "GOING_TO_TARGET",
+  WORKING: "WORKING"
 };
 
-export let POP_WORKING_ACTION = {
+let POP_JOB_ACTION = {
   START_SEARCHING: "START_SEARCHING",
-  GO_TO_TARGET: "GO_TO_TARGET"
+  TARGET_FOUND: "TARGET_FOUND",
+  ARRIVED_AT_TARGET: "ARRIVED_AT_TARGET",
+  WORK_PROGRESS: "WORK_PROGRESS"
 };
 
-export let workingStates = {
-  initial: POP_WORKING_STATE.IDLE,
+let workingStates = {
+  initial: POP_JOB_STATE.IDLE,
   states: {
-    [POP_WORKING_STATE.IDLE]: {
+    [POP_JOB_STATE.IDLE]: {
       on: {
-        [POP_WORKING_ACTION.START_SEARCHING]: {
-          target: POP_WORKING_STATE.SEARCHING
+        [POP_JOB_ACTION.START_SEARCHING]: {
+          target: POP_JOB_STATE.SEARCHING
         }
       }
     },
-    [POP_WORKING_STATE.SEARCHING]: {
-      actions: assign({ searching: true })
+    [POP_JOB_STATE.SEARCHING]: {
+      on: {
+        [POP_JOB_ACTION.TARGET_FOUND]: {
+          target: POP_JOB_STATE.GOING_TO_TARGET
+        }
+      }
     },
-    [POP_WORKING_STATE.GOING_TO_TARGET]: {
+    [POP_JOB_STATE.GOING_TO_TARGET]: {
       entry: assign({
         target: (context, event) => event.data
-      })
+      }),
+      on: {
+        [POP_JOB_ACTION.ARRIVED_AT_TARGET]: {
+          target: POP_JOB_STATE.WORKING
+        }
+      }
+    },
+    [POP_JOB_STATE.WORKING]: {
+      on: {
+        [POP_JOB_ACTION.WORK_PROGRESS]: {
+          actions: assign({
+            job: (context, event) => {
+              let { job } = context;
+              job.progress = event.data;
+              return job;
+            }
+          })
+        }
+      }
+    }
+  }
+};
+
+let popMachine = Machine({
+  id: "pop",
+  initial: POP_STATE.IDLE,
+  context: {
+    x: 0,
+    y: 0,
+    textureName: null,
+    job: null
+  },
+  states: {
+    [POP_STATE.IDLE]: {
+      on: {
+        [POP_ACTION.ASSIGN_JOB]: {
+          actions: assign({ job: (context, event) => event.data }),
+          target: POP_STATE.JOB
+        }
+      }
+    },
+    [POP_STATE.JOB]: {
+      ...workingStates
     }
   },
   on: {
@@ -50,30 +99,8 @@ export let workingStates = {
           y: context.y + event.data.y
         };
       })
-    },
-    [POP_WORKING_ACTION.GO_TO_TARGET]: {
-      target: [`${POP_STATE.WORKING}.${POP_WORKING_STATE.GOING_TO_TARGET}`]
-    }
-  }
-};
-
-export let popMachine = Machine({
-  id: "pop",
-  initial: POP_STATE.IDLE,
-  context: {
-    x: 0,
-    y: 0
-  },
-  states: {
-    [POP_STATE.IDLE]: {
-      on: {
-        [POP_ACTION.START_WORKING]: {
-          target: POP_STATE.WORKING
-        }
-      }
-    },
-    [POP_STATE.WORKING]: {
-      ...workingStates
     }
   }
 });
+
+export { POP_STATE, POP_ACTION, POP_JOB_ACTION, POP_JOB_STATE, popMachine };

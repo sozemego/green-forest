@@ -57,9 +57,10 @@ export function addPop(pop) {
 }
 
 export let initialPops = [
-  // { x: 45.5, y: 50.5, textureName: "textures/hauler.png", type: "hauler" },
-  // { x: 52.5, y: 50.5, textureName: "textures/hauler.png", type: "hauler" },
-  // { x: 52.5, y: 50.5, textureName: "textures/hauler.png", type: "hauler" },
-  // { x: 53.5, y: 50.5, textureName: "textures/worker.png", type: "worker" },
-  { x: 54.5, y: 48.0, textureName: "textures/worker.png", type: "worker" }
+  {
+    x: 54.5,
+    y: 48.0,
+    textureName: "textures/hauler.png",
+    job: null
+  }
 ];

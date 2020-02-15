@@ -2,16 +2,6 @@ import { assign, interpret, Machine, spawn } from "xstate";
 import { buildingMachine } from "./BuildingMachine";
 import { Building } from "./Building";
 
-export let buildingsState = {
-  buildings: [
-    {
-      x: 50,
-      y: 50,
-      textureName: "textures/castle_large.png"
-    }
-  ]
-};
-
 export const BUILDINGS_ACTIONS = {
   LOAD: "LOAD",
   BUILDING_CREATED: "BUILDING_CREATED"
@@ -57,3 +47,21 @@ let buildingsMachine = Machine({
 });
 
 export let buildingsService = interpret(buildingsMachine).start();
+
+export let initialBuildingsState = {
+  buildings: [
+    {
+      x: 50,
+      y: 50,
+      textureName: "textures/castle_large.png",
+      type: "castle"
+    },
+    {
+      x: 47,
+      y: 52,
+      textureName: "textures/lumberjack.png",
+      type: "lumberjack",
+      jobs: [{ type: "lumberjack", worker: null }]
+    }
+  ]
+};

@@ -5,7 +5,7 @@ import { useService } from "@xstate/react/lib";
 import {
   BUILDINGS_ACTIONS,
   buildingsService,
-  buildingsState
+  initialBuildingsState
 } from "./BuildingsMachine";
 
 export function BuildingsComponent() {
@@ -13,7 +13,7 @@ export function BuildingsComponent() {
   let buildings = state.context.buildings;
 
   useEffect(() => {
-    buildingsState.buildings.forEach(building => {
+    initialBuildingsState.buildings.forEach(building => {
       send({ type: BUILDINGS_ACTIONS.BUILDING_CREATED, data: building });
     });
   }, [send]);
