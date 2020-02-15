@@ -1,5 +1,6 @@
 import { assign, interpret, Machine, spawn } from "xstate";
 import { buildingMachine } from "./BuildingMachine";
+import { Building } from "./Building";
 
 export let buildingsState = {
   buildings: [
@@ -42,10 +43,10 @@ let buildingsMachine = Machine({
               };
               return [
                 ...buildings,
-                {
-                  id: nextId,
-                  ref: spawn(buildingMachine.withContext(building), nextId)
-                }
+                new Building(
+                  nextId,
+                  spawn(buildingMachine.withContext(building), nextId)
+                )
               ];
             }
           })

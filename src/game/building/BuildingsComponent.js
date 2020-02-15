@@ -7,9 +7,8 @@ import {
   buildingsService,
   buildingsState
 } from "./BuildingsMachine";
-import { getBuildingData } from "./selectors";
 
-export function Buildings() {
+export function BuildingsComponent() {
   let [state, send] = useService(buildingsService);
   let buildings = state.context.buildings;
 
@@ -22,15 +21,15 @@ export function Buildings() {
   return (
     <>
       {buildings.map((building, index) => (
-        <Building building={building} key={index} />
+        <BuildingComponent building={building} key={index} />
       ))}
     </>
   );
 }
 
-export function Building({ building }) {
-  let [state] = useService(building.ref);
-  let { x, y, textureName } = getBuildingData(state);
+export function BuildingComponent({ building }) {
+  useService(building.service);
+  let { x, y, textureName } = building;
 
   let mesh = useRef();
   let time = useRef(0);

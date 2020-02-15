@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Canvas } from "react-three-fiber";
 import { Tiles } from "./Tiles";
 import { Camera } from "./Camera";
-import { Buildings } from "./building/Buildings";
+import { BuildingsComponent } from "./building/BuildingsComponent";
 import { initialResources, startResources } from "./resource/ResourcesMachine";
 import { Resources } from "./resource/Resources";
 import { addPops, initialPops } from "./population/PopulationMachine";
@@ -22,7 +22,7 @@ export function Game() {
       <Camera />
       <Tiles />
       <Resources />
-      <Buildings />
+      <BuildingsComponent />
       <PopulationComponent />
       {/*<Effects />*/}
     </Canvas>
