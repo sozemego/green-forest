@@ -4,6 +4,7 @@ import { populationService } from "./PopulationMachine";
 import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { DELTA } from "../Constants";
+import { Pop } from "./Pop";
 
 export function PopulationComponent() {
   let [state] = useService(populationService);
@@ -17,7 +18,7 @@ export function PopulationComponent() {
   );
 }
 
-export function PopComponent({ pop }) {
+export function PopComponent({ pop }: PopProps) {
   useService(pop.service);
   let { x, y, textureName, job } = pop;
 
@@ -72,4 +73,8 @@ export function PopComponent({ pop }) {
       </mesh>
     </group>
   );
+}
+
+export interface PopProps {
+  pop: Pop;
 }

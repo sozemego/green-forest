@@ -1,31 +1,58 @@
-import { assign, Machine } from "xstate";
+import { assign, Interpreter, Machine } from "xstate";
+import { Pop } from "../population/Pop";
 
 const BUILDING_STATE = {
   IDLE: "IDLE"
-};
+} as const;
 
-const BUILDING_ACTIONS = {
+const BUILDING_ACTION = {
   ASSIGN_POP_TO_JOB: "ASSIGN_POP_TO_JOB"
 };
 
-let buildingMachine = Machine({
+interface BuildingSchema {
+  states: {
+    [BUILDING_STATE.IDLE]: {};
+  };
+}
+
+interface BuildingContext {
+  x: number;
+  y: number;
+  textureName: string;
+  jobs: any[];
+}
+
+export type BuildingAssignPopToJobAction = {
+  type: typeof BUILDING_ACTION.ASSIGN_POP_TO_JOB;
+  pop: Pop;
+  jobIndex: number;
+};
+
+export type BuildingAction = BuildingAssignPopToJobAction;
+
+export type BuildingActor = Interpreter<
+  BuildingContext,
+  BuildingSchema,
+  BuildingAction
+>;
+
+let buildingMachine = Machine<BuildingContext, BuildingSchema, BuildingAction>({
   id: "building",
   initial: BUILDING_STATE.IDLE,
   context: {
-    x: null,
-    y: null,
-    texture: null,
-    type: null,
+    x: 0,
+    y: 0,
+    textureName: "init",
     jobs: []
   },
   states: {
     [BUILDING_STATE.IDLE]: {}
   },
   on: {
-    [BUILDING_ACTIONS.ASSIGN_POP_TO_JOB]: {
+    [BUILDING_ACTION.ASSIGN_POP_TO_JOB]: {
       actions: assign({
         jobs: (context, event) => {
-          let { pop, jobIndex } = event.data;
+          let { pop, jobIndex } = event;
           let jobs = [...context.jobs];
           let job = jobs[jobIndex];
           job.worker = pop;
@@ -36,4 +63,4 @@ let buildingMachine = Machine({
   }
 });
 
-export { BUILDING_STATE, BUILDING_ACTIONS, buildingMachine };
+export { BUILDING_STATE, BUILDING_ACTION, buildingMachine };

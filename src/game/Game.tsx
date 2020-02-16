@@ -24,7 +24,6 @@ export function Game() {
       <Resources />
       <BuildingsComponent />
       <PopulationComponent />
-      {/*<Effects />*/}
     </Canvas>
   );
 }

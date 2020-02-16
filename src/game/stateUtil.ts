@@ -1,4 +1,4 @@
-export function getCurrentState(state): string | null {
+export function getCurrentState(state: any): string | null {
   if (typeof state === "string") {
     return state;
   }

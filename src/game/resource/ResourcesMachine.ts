@@ -1,4 +1,4 @@
-import { assign, interpret, Interpreter, Machine, sendParent, spawn } from "xstate";
+import { assign, interpret, Interpreter, Machine, spawn } from "xstate";
 import { Resource } from "./Resource";
 import { resourceMachine } from "./ResourceMachine";
 
@@ -12,73 +12,87 @@ export let RESOURCES_ACTION = {
 } as const;
 
 export interface ResourcesContext {
-  resources: Resource[]
+  resources: Resource[];
 }
 
 interface ResourcesSchema {
   states: {
-    [RESOURCES_STATE.IDLE]: {},
-  }
+    [RESOURCES_STATE.IDLE]: {};
+  };
 }
 
-export type AddResourceAction = { type: typeof RESOURCES_ACTION.ADD_RESOURCE, resource: ResourceData };
-export type RemoveResourceAction = { type: typeof RESOURCES_ACTION.REMOVE_RESOURCE, id: string }
+export type AddResourceAction = {
+  type: typeof RESOURCES_ACTION.ADD_RESOURCE;
+  resource: ResourceData;
+};
+export type RemoveResourceAction = {
+  type: typeof RESOURCES_ACTION.REMOVE_RESOURCE;
+  id: string;
+};
 
-export type ResourcesAction =
-  | AddResourceAction
-  | RemoveResourceAction
+export type ResourcesAction = AddResourceAction | RemoveResourceAction;
 
-let resourcesMachine = Machine<ResourcesContext, ResourcesSchema, ResourcesAction>(
-  {
-    id: "resources",
-    initial: RESOURCES_STATE.IDLE,
-    context: {
-      resources: []
-    },
-    states: {
-      [RESOURCES_STATE.IDLE]: {
-        on: {
-          [RESOURCES_ACTION.ADD_RESOURCE]: {
-            actions: assign((context, event) => {
-              let { resources } = context;
-              let nextId = `${resources.length + 1}`;
-              return {
-                resources: [
-                  ...resources,
-                  new Resource(
-                    nextId,
-                    spawn(
-                      resourceMachine.withContext({ id: nextId, ...event.resource }),
-                      nextId
-                    )
+let resourcesMachine = Machine<
+  ResourcesContext,
+  ResourcesSchema,
+  ResourcesAction
+>({
+  id: "resources",
+  initial: RESOURCES_STATE.IDLE,
+  context: {
+    resources: []
+  },
+  states: {
+    [RESOURCES_STATE.IDLE]: {
+      on: {
+        [RESOURCES_ACTION.ADD_RESOURCE]: {
+          actions: assign((context, event) => {
+            let { resources } = context;
+            let nextId = `${resources.length + 1}`;
+            return {
+              resources: [
+                ...resources,
+                new Resource(
+                  nextId,
+                  spawn(
+                    resourceMachine.withContext({
+                      id: nextId,
+                      ...event.resource
+                    }),
+                    nextId
                   )
-                ]
-              };
-            })
-          },
-          [RESOURCES_ACTION.REMOVE_RESOURCE]: {
-            actions: assign((context, event) => {
-              let {id} = event;
-              let resources = [...context.resources];
-              let index = resources.findIndex(resource => resource.id === id);
-              if (index > -1) {
-                resources.splice(index, 1);
-              }
-              return {
-                resources
-              };
-            })
-          }
+                )
+              ]
+            };
+          })
+        },
+        [RESOURCES_ACTION.REMOVE_RESOURCE]: {
+          actions: assign((context, event) => {
+            let { id } = event;
+            let resources = [...context.resources];
+            let index = resources.findIndex(resource => resource.id === id);
+            if (index > -1) {
+              resources.splice(index, 1);
+            }
+            return {
+              resources
+            };
+          })
         }
       }
     }
-  },
+  }
+});
 
-);
+export type ResourcesActor = Interpreter<
+  ResourcesContext,
+  ResourcesSchema,
+  ResourcesAction
+>;
 
-export type ResourcesActor = Interpreter<ResourcesContext, ResourcesSchema, ResourcesAction>;
-
-export let resourceService: ResourcesActor = interpret(resourcesMachine).start();
+export let resourceService: ResourcesActor = interpret(
+  resourcesMachine
+).start();
 
 export function startResources(resources: ResourceData[]) {
   if (!resources) {
@@ -88,12 +102,15 @@ export function startResources(resources: ResourceData[]) {
   for (let resource of resources) {
     resourceService.send({
       type: RESOURCES_ACTION.ADD_RESOURCE,
-      resource: {...resource}
+      resource: { ...resource }
     });
   }
 }
 
-export type ResourceData = Pick<Resource, 'x' | 'y' | 'textureName' | 'type' | 'resources'>
+export type ResourceData = Pick<
+  Resource,
+  "x" | "y" | "textureName" | "type" | "resources"
+>;
 
 export let initialResources: ResourceData[] = [
   {
@@ -152,15 +169,81 @@ export let initialResources: ResourceData[] = [
     type: "tree",
     resources: { wood: 5 }
   },
-  { x: 25, y: 25, textureName: "textures/stone.png", type: "stone", resources: {} },
-  { x: 38, y: 58, textureName: "textures/stone.png", type: "stone", resources: {} },
-  { x: 55, y: 40, textureName: "textures/stone.png", type: "stone", resources: {} },
-  { x: 56, y: 45, textureName: "textures/stone.png", type: "stone", resources: {} },
-  { x: 40, y: 40, textureName: "textures/stone.png", type: "stone", resources: {} },
-  { x: 48, y: 45, textureName: "textures/stone.png", type: "stone", resources: {} },
-  { x: 52, y: 52, textureName: "textures/iron.png", type: "iron", resources: {} },
-  { x: 55, y: 50, textureName: "textures/iron.png", type: "iron", resources: {} },
-  { x: 68, y: 45, textureName: "textures/iron.png", type: "iron", resources: {} },
-  { x: 68, y: 52, textureName: "textures/iron.png", type: "iron", resources: {} },
-  { x: 45, y: 49, textureName: "textures/iron.png", type: "iron", resources: {} }
+  {
+    x: 25,
+    y: 25,
+    textureName: "textures/stone.png",
+    type: "stone",
+    resources: {}
+  },
+  {
+    x: 38,
+    y: 58,
+    textureName: "textures/stone.png",
+    type: "stone",
+    resources: {}
+  },
+  {
+    x: 55,
+    y: 40,
+    textureName: "textures/stone.png",
+    type: "stone",
+    resources: {}
+  },
+  {
+    x: 56,
+    y: 45,
+    textureName: "textures/stone.png",
+    type: "stone",
+    resources: {}
+  },
+  {
+    x: 40,
+    y: 40,
+    textureName: "textures/stone.png",
+    type: "stone",
+    resources: {}
+  },
+  {
+    x: 48,
+    y: 45,
+    textureName: "textures/stone.png",
+    type: "stone",
+    resources: {}
+  },
+  {
+    x: 52,
+    y: 52,
+    textureName: "textures/iron.png",
+    type: "iron",
+    resources: {}
+  },
+  {
+    x: 55,
+    y: 50,
+    textureName: "textures/iron.png",
+    type: "iron",
+    resources: {}
+  },
+  {
+    x: 68,
+    y: 45,
+    textureName: "textures/iron.png",
+    type: "iron",
+    resources: {}
+  },
+  {
+    x: 68,
+    y: 52,
+    textureName: "textures/iron.png",
+    type: "iron",
+    resources: {}
+  },
+  {
+    x: 45,
+    y: 49,
+    textureName: "textures/iron.png",
+    type: "iron",
+    resources: {}
+  }
 ];

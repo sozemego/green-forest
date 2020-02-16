@@ -3,18 +3,19 @@ import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { useService } from "@xstate/react/lib";
 import {
-  BUILDINGS_ACTIONS,
+  BUILDINGS_ACTION,
   buildingsService,
-  initialBuildingsState
+  initialBuildings
 } from "./BuildingsMachine";
+import { Building } from "./Building";
 
 export function BuildingsComponent() {
   let [state, send] = useService(buildingsService);
   let buildings = state.context.buildings;
 
   useEffect(() => {
-    initialBuildingsState.buildings.forEach(building => {
-      send({ type: BUILDINGS_ACTIONS.BUILDING_CREATED, data: building });
+    initialBuildings.forEach(building => {
+      send({ type: BUILDINGS_ACTION.BUILDING_CREATED, building });
     });
   }, [send]);
 
@@ -27,7 +28,7 @@ export function BuildingsComponent() {
   );
 }
 
-export function BuildingComponent({ building }) {
+export function BuildingComponent({ building }: BuildingComponentProps) {
   useService(building.service);
   let { x, y, textureName } = building;
 
@@ -61,4 +62,8 @@ export function BuildingComponent({ building }) {
       />
     </mesh>
   );
+}
+
+export interface BuildingComponentProps {
+  building: Building;
 }

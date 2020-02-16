@@ -4,22 +4,21 @@ import {
   POP_ACTION,
   POP_STATE,
   POP_JOB_ACTION,
-  POP_JOB_STATE
+  POP_JOB_STATE,
+  PopActor
 } from "./PopMachine";
 import { getResources } from "../resource/selectors";
 import { resourceService } from "../resource/ResourcesMachine";
 import { buildingsService } from "../building/BuildingsMachine";
 import { calculateDistance, HasPosition } from "../util";
 import { Resource } from "../resource/Resource";
-import { Interpreter } from "xstate";
 import { Building } from "../building/Building";
 
 export class Pop {
-
   readonly id: string;
-  readonly service: Interpreter<PopContext>;
+  readonly service: PopActor;
 
-  constructor(id: string, service: Interpreter<PopContext>) {
+  constructor(id: string, service: PopActor) {
     this.id = id;
     this.service = service;
   }
@@ -37,13 +36,12 @@ export class Pop {
   updateWorker(delta: number) {
     let state = this.state;
 
-    // console.log(state);
-
     if (state === POP_STATE.IDLE) {
       let allBuildings = buildingsService.state.context.buildings;
       //this search is very wonky
+      console.log(allBuildings);
       let lumberjack = allBuildings
-        .filter(building => building.jobs)
+        .filter(building => building.jobs && building.jobs.length)
         .filter(building => building.jobs[0].type === "gatherer")[0];
       return this.assignJob(lumberjack, 0);
     }
@@ -76,6 +74,7 @@ export class Pop {
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.GOING_TO_TARGET}`) {
       let { x, y, target } = this;
+      target = target as HasPosition;
       let angle = new Vector2(target.x, target.y)
         .sub(new Vector2(x, y))
         .angle();
@@ -110,7 +109,7 @@ export class Pop {
   assignJob(building: Building, jobIndex: number) {
     this.service.send({
       type: POP_ACTION.ASSIGN_JOB,
-      data: { building, jobIndex, progress: 0 }
+      job: { building, jobIndex, progress: 0 }
     });
     building.assignPopToJob(this, jobIndex);
   }
@@ -126,14 +125,15 @@ export class Pop {
   goToTarget(target: HasPosition) {
     return this.service.send({
       type: POP_JOB_ACTION.TARGET_FOUND,
-      data: target
+      target
     });
   }
 
   move(x: number, y: number) {
     this.service.send({
       type: POP_ACTION.MOVE,
-      data: { x, y }
+      x,
+      y
     });
   }
 
@@ -142,10 +142,10 @@ export class Pop {
   }
 
   workProgress(progress: number) {
-    this.service.send({ type: POP_JOB_ACTION.WORK_PROGRESS, data: progress });
+    this.service.send({ type: POP_JOB_ACTION.WORK_PROGRESS, progress });
   }
 
-  sortByDistance(resources, range: number, building: Building) {
+  sortByDistance(resources: Resource[], range: number, building: Building) {
     let copy = [...resources];
     copy = copy.filter(resource => {
       let distance = calculateDistance(building, {
@@ -168,10 +168,6 @@ export class Pop {
 
   get y() {
     return this._context.y;
-  }
-
-  get type() {
-    return this._context.type;
   }
 
   get textureName() {
@@ -202,14 +198,4 @@ export class Pop {
   get state() {
     return getCurrentState(this.service.state.value);
   }
-}
-
-export interface PopContext {
-  id: string;
-  x: number;
-  y: number;
-  textureName: string;
-  type: string;
-  target: HasPosition | null;
-  job: any
 }
