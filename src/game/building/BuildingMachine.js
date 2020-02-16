@@ -25,10 +25,10 @@ let buildingMachine = Machine({
     [BUILDING_ACTIONS.ASSIGN_POP_TO_JOB]: {
       actions: assign({
         jobs: (context, event) => {
-          let { pop, job } = event.data;
+          let { pop, jobIndex } = event.data;
           let jobs = [...context.jobs];
-          let freeJob = jobs.filter(j => j.type === job && j.worker === null);
-          freeJob.worker = pop;
+          let job = jobs[jobIndex];
+          job.worker = pop;
           return jobs;
         }
       })

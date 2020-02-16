@@ -6,10 +6,10 @@ export class Building {
     this.service = service;
   }
 
-  assignPopToJob(pop, job) {
+  assignPopToJob(pop, jobIndex) {
     this.service.send({
       type: BUILDING_ACTIONS.ASSIGN_POP_TO_JOB,
-      data: { pop, job }
+      data: { pop, jobIndex }
     });
   }
 

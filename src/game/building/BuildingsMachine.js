@@ -53,15 +53,13 @@ export let initialBuildingsState = {
     {
       x: 50,
       y: 50,
-      textureName: "textures/castle_large.png",
-      type: "castle"
+      textureName: "textures/castle_large.png"
     },
     {
       x: 47,
       y: 52,
       textureName: "textures/lumberjack.png",
-      type: "lumberjack",
-      jobs: [{ type: "lumberjack", worker: null }]
+      jobs: [{ type: "lumberjack", worker: null, range: 5 }]
     }
   ]
 };

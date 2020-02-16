@@ -35,10 +35,11 @@ export class Pop {
 
     if (state === POP_STATE.IDLE) {
       let allBuildings = buildingsService.state.context.buildings;
-      let lumberjack = allBuildings.filter(
-        building => building.type === "lumberjack"
-      )[0];
-      return this.assignJob(lumberjack, "lumberjack");
+      //this search is very wonky
+      let lumberjack = allBuildings
+        .filter(building => building.jobs)
+        .filter(building => building.jobs[0].type === "lumberjack")[0];
+      return this.assignJob(lumberjack, 0);
     }
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.IDLE}`) {
@@ -47,14 +48,15 @@ export class Pop {
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.SEARCHING}`) {
       let resources = getResources(resourceService);
-      let job = this.job;
-      if (job.job === "lumberjack") {
+      let building = this.job.building;
+      let job = building.jobs[this.job.jobIndex];
+      if (job.type === "lumberjack") {
         resources = resources.filter(resource => resource.type === "tree");
       }
       if (resources.length === 0) {
         return this.rest();
       }
-      resources = this.sortByDistance(resources);
+      resources = this.sortByDistance(resources, job.range, building);
       let target = resources[0];
       return this.goToTarget(target);
     }
@@ -75,14 +77,14 @@ export class Pop {
     }
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.WORKING}`) {
-      let { progress, job } = this.job;
-      let { target } = this;
+      let { progress } = this.job;
+      let { jobData, target } = this;
       if (progress < 1) {
         this.workProgress(progress + delta);
       } else {
         if (target instanceof Resource) {
           let resource = null;
-          if (job === "lumberjack") {
+          if (jobData.type === "lumberjack") {
             resource = "wood";
           }
           target.modifyResources(resource, -1);
@@ -92,12 +94,12 @@ export class Pop {
     }
   }
 
-  assignJob(building, job) {
+  assignJob(building, jobIndex) {
     this.service.send({
       type: POP_ACTION.ASSIGN_JOB,
-      data: { building, job, progress: 0 }
+      data: { building, jobIndex, progress: 0 }
     });
-    building.assignPopToJob(this, job);
+    building.assignPopToJob(this, jobIndex);
   }
 
   startSearching() {
@@ -130,11 +132,18 @@ export class Pop {
     this.service.send({ type: POP_JOB_ACTION.WORK_PROGRESS, data: progress });
   }
 
-  sortByDistance(resources) {
+  sortByDistance(resources, range, building) {
     let copy = [...resources];
+    copy = copy.filter(resource => {
+      let distance = calculateDistance(building, {
+        x: resource.x,
+        y: resource.y
+      });
+      return distance < range;
+    });
     copy.sort((a, b) => {
-      let distanceFromA = calculateDistance(this, { x: a.x, y: a.y });
-      let distanceFromB = calculateDistance(this, { x: b.x, y: b.y });
+      let distanceFromA = calculateDistance(building, { x: a.x, y: a.y });
+      let distanceFromB = calculateDistance(building, { x: b.x, y: b.y });
       return distanceFromA - distanceFromB;
     });
     return copy;
@@ -162,6 +171,15 @@ export class Pop {
 
   get job() {
     return this._context.job;
+  }
+
+  get jobBuilding() {
+    return this.job.building;
+  }
+
+  get jobData() {
+    let { jobIndex, building } = this.job;
+    return building.jobs[jobIndex];
   }
 
   get _context() {
