@@ -55,6 +55,7 @@ type GameAddResourceAction = {
   type: typeof GAME_ACTION.ADD_RESOURCE;
   resource: ResourceData;
 };
+
 type GameRemoveResourceAction = {
   type: typeof GAME_ACTION.REMOVE_RESOURCE;
   id: string;
@@ -149,6 +150,18 @@ let gameMachine = Machine<GameContext, GameSchema, GameAction>({
         };
       })
     },
+    [GAME_ACTION.REMOVE_RESOURCE]: {
+      actions: assign({
+        resources: (context, event: GameRemoveResourceAction) => {
+          let resources = [...context.resources];
+          let index = resources.findIndex(resource => resource.id === event.id);
+          if (index > -1) {
+            resources.splice(index, 1);
+          }
+          return resources;
+        }
+      })
+    },
     [GAME_ACTION.ADD_POP]: {
       actions: assign<GameContext, GamePopulationAddPopAction>(
         (context, event) => {
@@ -197,7 +210,14 @@ export let initialBuildings: BuildingData[] = [
     x: 47,
     y: 52,
     textureName: "textures/lumberjack.png",
-    jobs: [{ type: "gatherer", resource: "wood", worker: null, range: 5 }]
+    jobs: [
+      {
+        type: "gatherer",
+        resource: "wood",
+        worker: null,
+        range: 5
+      }
+    ]
   }
 ];
 

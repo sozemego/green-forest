@@ -1,5 +1,6 @@
 import { assign, Interpreter, Machine } from "xstate";
 import { HasPosition } from "../util";
+import { Building } from "../building/Building";
 
 let POP_STATE = {
   IDLE: "IDLE",
@@ -68,7 +69,9 @@ let jobMachine = {
           actions: assign<PopContext, PopJobWorkProgress>({
             job: (context: PopContext, event: PopJobWorkProgress) => {
               let { job } = context;
-              job.progress = event.progress;
+              if (job) {
+                job.progress = event.progress;
+              }
               return job;
             }
           })
@@ -85,12 +88,18 @@ interface PopSchema {
   };
 }
 
+export interface PopJob {
+  building: Building;
+  jobIndex: number;
+  progress: number;
+}
+
 interface PopContext {
   id: string;
   x: number;
   y: number;
   textureName: string;
-  job: any | null;
+  job: PopJob | null;
   target: HasPosition | null;
 }
 

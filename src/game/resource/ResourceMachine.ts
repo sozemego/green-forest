@@ -90,7 +90,7 @@ export let resourceMachine = Machine<
       type: "final" as "final",
       entry: sendParent((context: ResourceContext, event: any) => ({
         type: GAME_ACTION.REMOVE_RESOURCE,
-        data: context.id
+        id: context.id
       }))
     }
   }

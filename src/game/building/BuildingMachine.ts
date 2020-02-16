@@ -15,11 +15,18 @@ interface BuildingSchema {
   };
 }
 
+export interface Job {
+  type: string;
+  worker: Pop | null;
+  resource: string | null;
+  range: number;
+}
+
 interface BuildingContext {
   x: number;
   y: number;
   textureName: string;
-  jobs: any[];
+  jobs: Job[];
 }
 
 export type BuildingAssignPopToJobAction = {

@@ -12,6 +12,7 @@ import { calculateDistance, HasPosition } from "../util";
 import { Resource } from "../resource/Resource";
 import { Building } from "../building/Building";
 import { gameService } from "../GameMachine";
+import { Job } from "../building/BuildingMachine";
 
 export class Pop {
   readonly id: string;
@@ -49,16 +50,19 @@ export class Pop {
     }
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.SEARCHING}`) {
+      if (this.job === null) {
+        return this.rest();
+      }
       let resources = getResources(gameService);
-      let building = this.job.building;
-      let job = building.jobs[this.job.jobIndex];
+      let { building, jobIndex } = this.job;
+      let job = building.jobs[jobIndex];
 
       resources = resources.filter(resource => {
         let { resources } = resource;
         if (!resources) {
           return false;
         }
-        let count = resources[job.resource] || 0;
+        let count = resources[job.resource!] || 0;
         return count > 0;
       });
       resources = this.sortByDistance(resources, job.range, building);
@@ -87,17 +91,16 @@ export class Pop {
     }
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.WORKING}`) {
+      if (this.job === null) {
+        return this.rest();
+      }
       let { progress } = this.job;
       let { jobData, target } = this;
       if (progress < 1) {
         this.workProgress(progress + delta);
       } else {
         if (target instanceof Resource) {
-          let resource = null;
-          if (jobData.type === "lumberjack") {
-            resource = "wood";
-          }
-          target.modifyResources(resource as string, -1);
+          target.modifyResources(jobData.resource!, -1);
         }
         this.rest();
       }
@@ -180,11 +183,10 @@ export class Pop {
     return this._context.job;
   }
 
-  get jobBuilding() {
-    return this.job.building;
-  }
-
-  get jobData() {
+  get jobData(): Job {
+    if (this.job === null) {
+      throw new Error("Job cannot be null when getting jobData");
+    }
     let { jobIndex, building } = this.job;
     return building.jobs[jobIndex];
   }
