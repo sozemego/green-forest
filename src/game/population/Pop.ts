@@ -39,7 +39,6 @@ export class Pop {
     if (state === POP_STATE.IDLE) {
       let allBuildings = buildingsService.state.context.buildings;
       //this search is very wonky
-      console.log(allBuildings);
       let lumberjack = allBuildings
         .filter(building => building.jobs && building.jobs.length)
         .filter(building => building.jobs[0].type === "gatherer")[0];
