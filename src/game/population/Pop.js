@@ -53,10 +53,10 @@ export class Pop {
       if (job.type === "lumberjack") {
         resources = resources.filter(resource => resource.type === "tree");
       }
+      resources = this.sortByDistance(resources, job.range, building);
       if (resources.length === 0) {
         return this.rest();
       }
-      resources = this.sortByDistance(resources, job.range, building);
       let target = resources[0];
       return this.goToTarget(target);
     }
