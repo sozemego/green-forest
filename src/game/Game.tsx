@@ -3,14 +3,26 @@ import { Canvas } from "react-three-fiber";
 import { Tiles } from "./Tiles";
 import { Camera } from "./Camera";
 import { BuildingsComponent } from "./building/BuildingsComponent";
-import { initialResources, startResources } from "./resource/ResourcesMachine";
 import { Resources } from "./resource/Resources";
-import { addPops, initialPops } from "./population/PopulationMachine";
 import { PopulationComponent } from "./population/PopulationComponent";
 import { GameUIContainer } from "./ui/GameUIContainer";
+import {
+  GAME_ACTION,
+  gameService,
+  initialPops,
+  addPops,
+  startResources,
+  initialResources,
+  initialBuildings,
+  startBuildings
+} from "./GameMachine";
 
 export function Game() {
   useEffect(() => {
+    gameService.start();
+    gameService.send({ type: GAME_ACTION.START });
+
+    startBuildings(initialBuildings);
     startResources(initialResources);
     addPops(initialPops);
   }, []);

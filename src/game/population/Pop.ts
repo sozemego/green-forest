@@ -8,11 +8,10 @@ import {
   PopActor
 } from "./PopMachine";
 import { getResources } from "../resource/selectors";
-import { resourceService } from "../resource/ResourcesMachine";
-import { buildingsService } from "../building/BuildingsMachine";
 import { calculateDistance, HasPosition } from "../util";
 import { Resource } from "../resource/Resource";
 import { Building } from "../building/Building";
+import { gameService } from "../GameMachine";
 
 export class Pop {
   readonly id: string;
@@ -37,7 +36,7 @@ export class Pop {
     let state = this.state;
 
     if (state === POP_STATE.IDLE) {
-      let allBuildings = buildingsService.state.context.buildings;
+      let allBuildings = gameService.state.context.buildings;
       //this search is very wonky
       let lumberjack = allBuildings
         .filter(building => building.jobs && building.jobs.length)
@@ -50,7 +49,7 @@ export class Pop {
     }
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.SEARCHING}`) {
-      let resources = getResources(resourceService);
+      let resources = getResources(gameService);
       let building = this.job.building;
       let job = building.jobs[this.job.jobIndex];
 

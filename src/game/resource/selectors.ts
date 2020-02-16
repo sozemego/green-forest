@@ -1,5 +1,5 @@
-import { ResourcesActor } from "./ResourcesMachine";
+import { GameActor } from "../GameMachine";
 
-export function getResources(service: ResourcesActor) {
+export function getResources(service: GameActor) {
   return service.state.context.resources;
 }

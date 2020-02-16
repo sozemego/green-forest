@@ -1,5 +1,5 @@
 import { assign, Interpreter, Machine, sendParent } from "xstate";
-import { RESOURCES_ACTION } from "./ResourcesMachine";
+import { GAME_ACTION } from "../GameMachine";
 
 export let RESOURCE_STATE = {
   IDLE: "IDLE",
@@ -89,7 +89,7 @@ export let resourceMachine = Machine<
     [RESOURCE_STATE.DEAD]: {
       type: "final" as "final",
       entry: sendParent((context: ResourceContext, event: any) => ({
-        type: RESOURCES_ACTION.REMOVE_RESOURCE,
+        type: GAME_ACTION.REMOVE_RESOURCE,
         data: context.id
       }))
     }

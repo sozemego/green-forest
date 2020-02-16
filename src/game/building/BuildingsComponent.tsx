@@ -1,23 +1,13 @@
-import React, { useEffect, useMemo, useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { useService } from "@xstate/react/lib";
-import {
-  BUILDINGS_ACTION,
-  buildingsService,
-  initialBuildings
-} from "./BuildingsMachine";
 import { Building } from "./Building";
+import { gameService } from "../GameMachine";
 
 export function BuildingsComponent() {
-  let [state, send] = useService(buildingsService);
+  let [state] = useService(gameService);
   let buildings = state.context.buildings;
-
-  useEffect(() => {
-    initialBuildings.forEach(building => {
-      send({ type: BUILDINGS_ACTION.BUILDING_CREATED, building });
-    });
-  }, [send]);
 
   return (
     <>

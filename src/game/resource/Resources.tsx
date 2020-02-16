@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { useService } from "@xstate/react/lib";
-import { resourceService } from "./ResourcesMachine";
 import { Trees } from "./Trees";
 import { Rocks } from "./Rocks";
+import { gameService } from "../GameMachine";
 
 export function Resources() {
-  let [state] = useService(resourceService);
+  let [state] = useService(gameService);
   let resources = state.context.resources;
 
   let rocks = useMemo(

@@ -1,17 +1,18 @@
 import React, { useMemo, useRef } from "react";
 import { useService } from "@xstate/react/lib";
-import { populationService } from "./PopulationMachine";
 import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { DELTA } from "../Constants";
 import { Pop } from "./Pop";
+import { gameService } from "../GameMachine";
 
 export function PopulationComponent() {
-  let [state] = useService(populationService);
-  let pops = state.context.pops;
+  let [state] = useService(gameService);
+  let population = state.context.population;
+
   return (
     <>
-      {pops.map(pop => (
+      {population.map(pop => (
         <PopComponent pop={pop} key={pop.id} />
       ))}
     </>
