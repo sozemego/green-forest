@@ -1,16 +1,19 @@
-import { RESOURCE_ACTION, RESOURCE_STATE } from "./ResourcesMachine";
+import { RESOURCE_ACTION, RESOURCE_STATE, ResourceActor } from "./ResourceMachine";
 import { getCurrentState } from "../stateUtil";
 
 export class Resource {
-  constructor(id, service) {
+  readonly id: string;
+  readonly service: ResourceActor;
+
+  constructor(id: string, service: ResourceActor) {
     this.id = id;
     this.service = service;
   }
 
-  modifyResources(resource, change) {
+  modifyResources(resource: string, change: number) {
     this.service.send({
       type: RESOURCE_ACTION.MODIFY_RESOURCES,
-      data: { resource, change }
+      resource, change
     });
   }
 
@@ -38,7 +41,7 @@ export class Resource {
     return getCurrentState(this.service.state.value) === RESOURCE_STATE.DEAD;
   }
 
-  get _context() {
+  private get _context() {
     return this.service.state.context;
   }
 }

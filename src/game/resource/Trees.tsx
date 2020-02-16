@@ -3,14 +3,15 @@ import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
 import { WindShader } from "../shaders/WindShader";
+import { Resource } from "./Resource";
 
-export function Trees({ trees }) {
+export function Trees({ trees }: TreesProps) {
   let groups = useMemo(() => {
     let groups = [];
     for (let i = 0; i < trees.length; i++) {
       let tree = trees[i];
       let { x, y, textureName } = tree;
-      let group = {
+      let group: GroupProps = {
         id: tree.id,
         x,
         y: y + 0.25,
@@ -38,14 +39,18 @@ export function Trees({ trees }) {
 
   return (
     <>
-      {groups.map((group, index) => {
+      {groups.map(group => {
         return <TreeGroup group={group} key={group.id} />;
       })}
     </>
   );
 }
 
-function TreeGroup({ group }) {
+export interface TreesProps {
+  trees: Resource[]
+}
+
+function TreeGroup({ group }: TreeGroupProps) {
   return (
     <group position={[group.x, group.y, 0.1]} renderOrder={1}>
       {group.trees.map((tree, index) => (
@@ -55,7 +60,24 @@ function TreeGroup({ group }) {
   );
 }
 
-function Tree({ tree }) {
+interface GroupProps {
+  id: string,
+  x: number;
+  y: number;
+  trees: TreeInGroupProp[]
+}
+
+interface TreeInGroupProp {
+  x: number;
+  y: number;
+  textureName: string;
+}
+
+export interface TreeGroupProps {
+  group: GroupProps
+}
+
+function Tree({ tree }: TreeProps) {
   let mesh = useRef();
   let shader = WindShader;
   let uniforms = cloneUniforms(shader.uniforms);
@@ -97,4 +119,8 @@ function Tree({ tree }) {
       />
     </mesh>
   );
+}
+
+export interface TreeProps {
+  tree: TreeInGroupProp
 }

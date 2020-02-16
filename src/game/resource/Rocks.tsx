@@ -1,7 +1,8 @@
 import React, { useMemo, useRef } from "react";
 import { TextureLoader } from "three";
+import { Resource } from "./Resource";
 
-export function Rocks({ rocks }) {
+export function Rocks({ rocks }: RocksProps) {
   return (
     <>
       {rocks.map(rock => (
@@ -11,7 +12,11 @@ export function Rocks({ rocks }) {
   );
 }
 
-export function Rock({ rock }) {
+export interface RocksProps {
+  rocks: Resource[]
+}
+
+export function Rock({ rock }: RockProps) {
   let { x, y, textureName } = rock;
   let texture = useMemo(() => new TextureLoader().load(textureName), [
     textureName
@@ -34,4 +39,8 @@ export function Rock({ rock }) {
       />
     </mesh>
   );
+}
+
+export interface RockProps {
+  rock: Resource;
 }

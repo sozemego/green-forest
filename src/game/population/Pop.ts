@@ -9,16 +9,22 @@ import {
 import { getResources } from "../resource/selectors";
 import { resourceService } from "../resource/ResourcesMachine";
 import { buildingsService } from "../building/BuildingsMachine";
-import { calculateDistance } from "../util";
+import { calculateDistance, HasPosition } from "../util";
 import { Resource } from "../resource/Resource";
+import { Interpreter } from "xstate";
+import { Building } from "../building/Building";
 
 export class Pop {
-  constructor(id, service) {
+
+  readonly id: string;
+  readonly service: Interpreter<PopContext>;
+
+  constructor(id: string, service: Interpreter<PopContext>) {
     this.id = id;
     this.service = service;
   }
 
-  update(delta) {
+  update(delta: number) {
     let job = this.job;
 
     if (!job) {
@@ -28,7 +34,7 @@ export class Pop {
     this.updateWorker(delta);
   }
 
-  updateWorker(delta) {
+  updateWorker(delta: number) {
     let state = this.state;
 
     // console.log(state);
@@ -94,14 +100,14 @@ export class Pop {
           if (jobData.type === "lumberjack") {
             resource = "wood";
           }
-          target.modifyResources(resource, -1);
+          target.modifyResources(resource as string, -1);
         }
         this.rest();
       }
     }
   }
 
-  assignJob(building, jobIndex) {
+  assignJob(building: Building, jobIndex: number) {
     this.service.send({
       type: POP_ACTION.ASSIGN_JOB,
       data: { building, jobIndex, progress: 0 }
@@ -117,14 +123,14 @@ export class Pop {
     this.service.send(POP_ACTION.REST);
   }
 
-  goToTarget(target) {
+  goToTarget(target: HasPosition) {
     return this.service.send({
       type: POP_JOB_ACTION.TARGET_FOUND,
       data: target
     });
   }
 
-  move(x, y) {
+  move(x: number, y: number) {
     this.service.send({
       type: POP_ACTION.MOVE,
       data: { x, y }
@@ -135,11 +141,11 @@ export class Pop {
     this.service.send(POP_JOB_ACTION.ARRIVED_AT_TARGET);
   }
 
-  workProgress(progress) {
+  workProgress(progress: number) {
     this.service.send({ type: POP_JOB_ACTION.WORK_PROGRESS, data: progress });
   }
 
-  sortByDistance(resources, range, building) {
+  sortByDistance(resources, range: number, building: Building) {
     let copy = [...resources];
     copy = copy.filter(resource => {
       let distance = calculateDistance(building, {
@@ -196,4 +202,14 @@ export class Pop {
   get state() {
     return getCurrentState(this.service.state.value);
   }
+}
+
+export interface PopContext {
+  id: string;
+  x: number;
+  y: number;
+  textureName: string;
+  type: string;
+  target: HasPosition | null;
+  job: any
 }
