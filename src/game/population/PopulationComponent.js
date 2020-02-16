@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import { useService } from "@xstate/react/lib";
 import { populationService } from "./PopulationMachine";
-import { Mesh, TextureLoader } from "three";
+import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { DELTA } from "../Constants";
 

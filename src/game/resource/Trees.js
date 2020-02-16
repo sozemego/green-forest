@@ -11,6 +11,7 @@ export function Trees({ trees }) {
       let tree = trees[i];
       let { x, y, textureName } = tree;
       let group = {
+        id: tree.id,
         x,
         y: y + 0.25,
         trees: []
@@ -38,7 +39,7 @@ export function Trees({ trees }) {
   return (
     <>
       {groups.map((group, index) => {
-        return <TreeGroup group={group} key={index} />;
+        return <TreeGroup group={group} key={group.id} />;
       })}
     </>
   );
@@ -82,11 +83,13 @@ function Tree({ tree }) {
     <mesh position={[tree.x, tree.y, 0.0]} ref={mesh} rotation={[0, 0, 0]}>
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <shaderMaterial
-        args={{
-          uniforms,
-          vertexShader: shader.vertexShader,
-          fragmentShader: shader.fragmentShader
-        }}
+        args={[
+          {
+            uniforms,
+            vertexShader: shader.vertexShader,
+            fragmentShader: shader.fragmentShader
+          }
+        ]}
         attach={"material"}
         opacity={1}
         transparent={true}

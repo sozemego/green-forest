@@ -10,6 +10,7 @@ import { getResources } from "../resource/selectors";
 import { resourceService } from "../resource/ResourcesMachine";
 import { buildingsService } from "../building/BuildingsMachine";
 import { calculateDistance } from "../util";
+import { Resource } from "../resource/Resource";
 
 export class Pop {
   constructor(id, service) {
@@ -30,7 +31,7 @@ export class Pop {
   updateWorker(delta) {
     let state = this.state;
 
-    console.log(state);
+    // console.log(state);
 
     if (state === POP_STATE.IDLE) {
       let allBuildings = buildingsService.state.context.buildings;
@@ -74,10 +75,18 @@ export class Pop {
     }
 
     if (state === `${POP_STATE.JOB}.${POP_JOB_STATE.WORKING}`) {
-      let { progress } = this.job;
+      let { progress, job } = this.job;
+      let { target } = this;
       if (progress < 1) {
         this.workProgress(progress + delta);
       } else {
+        if (target instanceof Resource) {
+          let resource = null;
+          if (job === "lumberjack") {
+            resource = "wood";
+          }
+          target.modifyResources(resource, -1);
+        }
         this.rest();
       }
     }
