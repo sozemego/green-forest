@@ -16,7 +16,12 @@ export interface ResourceContext {
   y: number;
   textureName: string;
   type: string;
-  resources: Record<string, number>;
+  resources: Record<string, ResourceData>;
+}
+
+export interface ResourceData {
+  max: number;
+  count: number;
 }
 
 export type ResourceActor = Interpreter<
@@ -66,7 +71,7 @@ export let resourceMachine = Machine<
             }
             let allZero = true;
             Object.keys(context.resources).forEach(resource => {
-              if (context.resources[resource] > 0) {
+              if (context.resources[resource].count > 0) {
                 allZero = false;
               }
             });
@@ -78,7 +83,7 @@ export let resourceMachine = Machine<
             resources: (context, event) => {
               let resources = { ...context.resources };
               let { resource, change } = event;
-              resources[resource] += change;
+              resources[resource].count += change;
               return resources;
             }
           }),

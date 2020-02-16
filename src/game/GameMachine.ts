@@ -264,56 +264,56 @@ export let initialResources: ResourceData[] = [
     y: 15,
     textureName: "textures/tree.png",
     type: "tree",
-    resources: { wood: 5 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 50,
     y: 45,
     textureName: "textures/tree.png",
     type: "tree",
-    resources: { wood: 6 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 51,
     y: 42,
     textureName: "textures/tree.png",
     type: "tree",
-    resources: { wood: 5 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 48,
     y: 55,
     textureName: "textures/tree_1.png",
     type: "tree",
-    resources: { wood: 10 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 49,
     y: 49,
     textureName: "textures/tree.png",
     type: "tree",
-    resources: { wood: 5 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 50,
     y: 55,
     textureName: "textures/tree_1.png",
     type: "tree",
-    resources: { wood: 5 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 49,
     y: 45,
     textureName: "textures/tree_1.png",
     type: "tree",
-    resources: { wood: 5 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 40,
     y: 40,
     textureName: "textures/tree_1.png",
     type: "tree",
-    resources: { wood: 5 }
+    resources: { wood: { max: 5, count: 5 } }
   },
   {
     x: 25,

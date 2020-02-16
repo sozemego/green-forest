@@ -1,21 +1,23 @@
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
 import { WindShader } from "../shaders/WindShader";
 import { Resource } from "./Resource";
+import { ResourceData } from "./ResourceMachine";
 
 export function Trees({ trees }: TreesProps) {
   let groups = useMemo(() => {
     let groups = [];
     for (let i = 0; i < trees.length; i++) {
       let tree = trees[i];
-      let { x, y, textureName } = tree;
+      let { x, y, textureName, resources } = tree;
       let group: GroupProps = {
         id: tree.id,
         x,
         y: y + 0.25,
-        trees: []
+        trees: [],
+        resources
       };
       let positions = [
         [-0.25, 0.25],
@@ -51,10 +53,24 @@ export interface TreesProps {
 }
 
 function TreeGroup({ group }: TreeGroupProps) {
+  let { resources } = group;
+
+  let [opacity, setOpacity] = useState(1);
+  useFrame(() => {
+    let keys = Object.keys(resources);
+    if (keys.length > 0) {
+      let key = keys[0];
+      let resource = resources[key];
+      let newOpacity = resource.count / resource.max;
+      if (opacity !== newOpacity) {
+        setOpacity(newOpacity);
+      }
+    }
+  });
   return (
     <group position={[group.x, group.y, 0.1]} renderOrder={1}>
       {group.trees.map((tree, index) => (
-        <Tree tree={tree} key={index} />
+        <Tree tree={tree} key={index} opacity={opacity} />
       ))}
     </group>
   );
@@ -65,6 +81,7 @@ interface GroupProps {
   x: number;
   y: number;
   trees: TreeInGroupProp[];
+  resources: Record<string, ResourceData>;
 }
 
 interface TreeInGroupProp {
@@ -77,10 +94,15 @@ export interface TreeGroupProps {
   group: GroupProps;
 }
 
-function Tree({ tree }: TreeProps) {
+export interface TreeProps {
+  tree: TreeInGroupProp;
+  opacity: number;
+}
+
+function Tree({ tree, opacity }: TreeProps) {
   let mesh = useRef();
   let shader = WindShader;
-  let uniforms = cloneUniforms(shader.uniforms);
+  let uniforms = React.useMemo(() => cloneUniforms(shader.uniforms), []);
   let time = useRef(0);
   let texture = useMemo(() => new TextureLoader().load(tree.textureName), [
     tree.textureName
@@ -99,7 +121,13 @@ function Tree({ tree }: TreeProps) {
       type: "f",
       value: time.current
     };
+    uniforms["opacity"] = {
+      type: "f",
+      value: opacity
+    };
   });
+
+  console.log("TREE RENDER");
 
   return (
     <mesh position={[tree.x, tree.y, 0.0]} ref={mesh} rotation={[0, 0, 0]}>
@@ -113,14 +141,9 @@ function Tree({ tree }: TreeProps) {
           }
         ]}
         attach={"material"}
-        opacity={1}
         transparent={true}
         needsUpdate={true}
       />
     </mesh>
   );
-}
-
-export interface TreeProps {
-  tree: TreeInGroupProp;
 }

@@ -62,7 +62,7 @@ export class Pop {
         if (!resources) {
           return false;
         }
-        let count = resources[job.resource!] || 0;
+        let count = resources[job.resource!]?.count || 0;
         return count > 0;
       });
       resources = this.sortByDistance(resources, job.range, building);
