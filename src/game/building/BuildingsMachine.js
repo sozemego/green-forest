@@ -59,7 +59,7 @@ export let initialBuildingsState = {
       x: 47,
       y: 52,
       textureName: "textures/lumberjack.png",
-      jobs: [{ type: "lumberjack", worker: null, range: 5 }]
+      jobs: [{ type: "gatherer", resource: "wood", worker: null, range: 5 }]
     }
   ]
 };

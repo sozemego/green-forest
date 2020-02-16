@@ -38,7 +38,7 @@ export class Pop {
       //this search is very wonky
       let lumberjack = allBuildings
         .filter(building => building.jobs)
-        .filter(building => building.jobs[0].type === "lumberjack")[0];
+        .filter(building => building.jobs[0].type === "gatherer")[0];
       return this.assignJob(lumberjack, 0);
     }
 
@@ -50,10 +50,17 @@ export class Pop {
       let resources = getResources(resourceService);
       let building = this.job.building;
       let job = building.jobs[this.job.jobIndex];
-      if (job.type === "lumberjack") {
-        resources = resources.filter(resource => resource.type === "tree");
-      }
+
+      resources = resources.filter(resource => {
+        let { resources } = resource;
+        if (!resources) {
+          return false;
+        }
+        let count = resources[job.resource] || 0;
+        return count > 0;
+      });
       resources = this.sortByDistance(resources, job.range, building);
+
       if (resources.length === 0) {
         return this.rest();
       }
