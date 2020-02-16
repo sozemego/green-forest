@@ -1,4 +1,8 @@
-import { RESOURCE_ACTION, RESOURCE_STATE, ResourceActor } from "./ResourceMachine";
+import {
+  RESOURCE_ACTION,
+  RESOURCE_STATE,
+  ResourceActor
+} from "./ResourceMachine";
 import { getCurrentState } from "../stateUtil";
 
 export class Resource {
@@ -13,7 +17,8 @@ export class Resource {
   modifyResources(resource: string, change: number) {
     this.service.send({
       type: RESOURCE_ACTION.MODIFY_RESOURCES,
-      resource, change
+      resource,
+      change
     });
   }
 

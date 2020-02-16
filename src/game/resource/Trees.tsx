@@ -47,7 +47,7 @@ export function Trees({ trees }: TreesProps) {
 }
 
 export interface TreesProps {
-  trees: Resource[]
+  trees: Resource[];
 }
 
 function TreeGroup({ group }: TreeGroupProps) {
@@ -61,10 +61,10 @@ function TreeGroup({ group }: TreeGroupProps) {
 }
 
 interface GroupProps {
-  id: string,
+  id: string;
   x: number;
   y: number;
-  trees: TreeInGroupProp[]
+  trees: TreeInGroupProp[];
 }
 
 interface TreeInGroupProp {
@@ -74,7 +74,7 @@ interface TreeInGroupProp {
 }
 
 export interface TreeGroupProps {
-  group: GroupProps
+  group: GroupProps;
 }
 
 function Tree({ tree }: TreeProps) {
@@ -122,5 +122,5 @@ function Tree({ tree }: TreeProps) {
 }
 
 export interface TreeProps {
-  tree: TreeInGroupProp
+  tree: TreeInGroupProp;
 }

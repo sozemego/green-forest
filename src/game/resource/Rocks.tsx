@@ -13,7 +13,7 @@ export function Rocks({ rocks }: RocksProps) {
 }
 
 export interface RocksProps {
-  rocks: Resource[]
+  rocks: Resource[];
 }
 
 export function Rock({ rock }: RockProps) {
