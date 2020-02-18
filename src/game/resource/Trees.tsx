@@ -127,8 +127,6 @@ function Tree({ tree, opacity }: TreeProps) {
     };
   });
 
-  console.log("TREE RENDER");
-
   return (
     <mesh position={[tree.x, tree.y, 0.0]} ref={mesh} rotation={[0, 0, 0]}>
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />

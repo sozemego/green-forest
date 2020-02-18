@@ -5,6 +5,8 @@ import { useFrame } from "react-three-fiber";
 import { DELTA } from "../Constants";
 import { Pop } from "./Pop";
 import { gameService } from "../GameMachine";
+import { FellTreeWorkAnimation } from "./FellTreeWorkAnimation";
+import { POP_JOB_STATE, POP_STATE } from "./PopMachine";
 
 export function PopulationComponent() {
   let [state] = useService(gameService);
@@ -21,7 +23,7 @@ export function PopulationComponent() {
 
 export function PopComponent({ pop }: PopProps) {
   useService(pop.service);
-  let { x, y, textureName, job } = pop;
+  let { x, y, textureName, job, state } = pop;
 
   let mesh = useRef();
 
@@ -54,7 +56,7 @@ export function PopComponent({ pop }: PopProps) {
           map={texture}
           opacity={1}
           transparent={true}
-          alphaTest={0.5}
+          // alphaTest={0.75}
         />
       </mesh>
       <mesh
@@ -69,9 +71,12 @@ export function PopComponent({ pop }: PopProps) {
           map={progressBarTexture}
           opacity={1}
           transparent={true}
-          alphaTest={0.5}
+          // alphaTest={0.75}
         />
       </mesh>
+      {job && state === `${POP_STATE.JOB}.${POP_JOB_STATE.WORKING}` && (
+        <FellTreeWorkAnimation />
+      )}
     </group>
   );
 }
