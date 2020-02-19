@@ -5,8 +5,10 @@ import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
 import { WindShader } from "../shaders/WindShader";
 import { Resource } from "./Resource";
 import { ResourceData } from "./ResourceMachine";
+import { useGameService } from "../useGameService";
 
 export function Trees({ trees }: TreesProps) {
+  let gameService = useGameService();
   let groups = useMemo(() => {
     let groups = [];
     for (let i = 0; i < trees.length; i++) {
@@ -17,7 +19,8 @@ export function Trees({ trees }: TreesProps) {
         x,
         y: y + 0.25,
         trees: [],
-        resources
+        resources,
+        onClick: () => (gameService.selectedObject = tree)
       };
       let positions = [
         [-0.25, 0.25],
@@ -68,7 +71,11 @@ function TreeGroup({ group }: TreeGroupProps) {
     }
   });
   return (
-    <group position={[group.x, group.y, 0.1]} renderOrder={1}>
+    <group
+      position={[group.x, group.y, 0.1]}
+      renderOrder={1}
+      onClick={() => group.onClick()}
+    >
       {group.trees.map((tree, index) => (
         <Tree tree={tree} key={index} opacity={opacity} />
       ))}
@@ -82,6 +89,7 @@ interface GroupProps {
   y: number;
   trees: TreeInGroupProp[];
   resources: Record<string, ResourceData>;
+  onClick: Function;
 }
 
 interface TreeInGroupProp {

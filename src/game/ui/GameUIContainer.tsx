@@ -3,14 +3,22 @@ import { GameUI } from "./GameUI";
 
 export function GameUIContainer({ children }: GameUIProps) {
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none"
+      }}
+    >
       <div
         style={{
           position: "absolute",
           left: 0,
           top: 0,
           width: "100%",
-          height: "100%"
+          height: "100%",
+          pointerEvents: "all"
         }}
       >
         {children}

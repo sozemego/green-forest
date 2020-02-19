@@ -3,11 +3,11 @@ import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { useService } from "@xstate/react/lib";
 import { Building } from "./Building";
-import { gameService } from "../GameMachine";
+import { useGameService } from "../useGameService";
 
 export function BuildingsComponent() {
-  let [state] = useService(gameService);
-  let buildings = state.context.buildings;
+  let gameService = useGameService();
+  let { buildings } = gameService;
 
   return (
     <>
@@ -20,6 +20,7 @@ export function BuildingsComponent() {
 
 export function BuildingComponent({ building }: BuildingComponentProps) {
   useService(building.service);
+  let gameService = useGameService();
   let { x, y, textureName } = building;
 
   let mesh = useRef();
@@ -41,6 +42,7 @@ export function BuildingComponent({ building }: BuildingComponentProps) {
       ref={mesh}
       rotation={[0, 0, 0]}
       renderOrder={5}
+      onClick={() => (gameService.selectedObject = building)}
     >
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <meshBasicMaterial

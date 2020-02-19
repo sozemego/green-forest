@@ -4,13 +4,13 @@ import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { DELTA } from "../Constants";
 import { Pop } from "./Pop";
-import { gameService } from "../GameMachine";
 import { FellTreeWorkAnimation } from "./FellTreeWorkAnimation";
 import { POP_JOB_STATE, POP_STATE } from "./PopMachine";
+import { useGameService } from "../useGameService";
 
 export function PopulationComponent() {
-  let [state] = useService(gameService);
-  let population = state.context.population;
+  let gameService = useGameService();
+  let { population } = gameService;
 
   return (
     <>
@@ -23,6 +23,7 @@ export function PopulationComponent() {
 
 export function PopComponent({ pop }: PopProps) {
   useService(pop.service);
+  let gameService = useGameService();
   let { x, y, textureName, job, state } = pop;
 
   let mesh = useRef();
@@ -49,6 +50,7 @@ export function PopComponent({ pop }: PopProps) {
         ref={mesh}
         rotation={[0, 0, 0]}
         renderOrder={5}
+        onClick={() => (gameService.selectedObject = pop)}
       >
         <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
         <meshBasicMaterial

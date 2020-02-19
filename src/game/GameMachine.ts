@@ -18,6 +18,7 @@ export let GAME_ACTION = {
   ADD_RESOURCE: "ADD_RESOURCE",
   REMOVE_RESOURCE: "REMOVE_RESOURCE",
   ADD_POP: "ADD_POP",
+  SELECT_OBJECT: "SELECT_OBJECT",
   LOAD: "LOAD",
   START: "START",
   PAUSE: "PAUSE"
@@ -36,6 +37,7 @@ export interface GameContext {
   resources: Resource[];
   buildings: Building[];
   population: Pop[];
+  selectedObject: any | null;
 }
 
 type GameStartAction = {
@@ -66,13 +68,19 @@ type GamePopulationAddPopAction = {
   pop: PopData;
 };
 
+type GameSelectObjectAction = {
+  type: typeof GAME_ACTION.SELECT_OBJECT;
+  object: any | null;
+};
+
 type GameAction =
   | GameStartAction
   | GameLoadAction
   | GameAddBuildingAction
   | GameAddResourceAction
   | GameRemoveResourceAction
-  | GamePopulationAddPopAction;
+  | GamePopulationAddPopAction
+  | GameSelectObjectAction;
 
 let gameMachine = Machine<GameContext, GameSchema, GameAction>({
   id: "game",
@@ -80,7 +88,8 @@ let gameMachine = Machine<GameContext, GameSchema, GameAction>({
   context: {
     buildings: [],
     population: [],
-    resources: []
+    resources: [],
+    selectedObject: null
   },
   states: {
     [GAME_STATE.NOT_STARTED]: {
@@ -183,6 +192,16 @@ let gameMachine = Machine<GameContext, GameSchema, GameAction>({
           };
         }
       )
+    },
+    [GAME_ACTION.SELECT_OBJECT]: {
+      actions: assign<GameContext, GameSelectObjectAction>({
+        selectedObject: (
+          context: GameContext,
+          event: GameSelectObjectAction
+        ) => {
+          return event.object;
+        }
+      })
     }
   }
 });

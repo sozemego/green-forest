@@ -1,12 +1,11 @@
 import React, { useMemo } from "react";
-import { useService } from "@xstate/react/lib";
 import { Trees } from "./Trees";
 import { Rocks } from "./Rocks";
-import { gameService } from "../GameMachine";
+import { useGameService } from "../useGameService";
 
 export function Resources() {
-  let [state] = useService(gameService);
-  let resources = state.context.resources;
+  let gameService = useGameService();
+  let { resources } = gameService;
 
   let rocks = useMemo(
     () => resources.filter(({ type }) => type === "stone" || type === "iron"),

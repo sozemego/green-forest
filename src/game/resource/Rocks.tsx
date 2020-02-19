@@ -1,6 +1,7 @@
 import React, { useMemo, useRef } from "react";
 import { TextureLoader } from "three";
 import { Resource } from "./Resource";
+import { useGameService } from "../useGameService";
 
 export function Rocks({ rocks }: RocksProps) {
   return (
@@ -17,6 +18,7 @@ export interface RocksProps {
 }
 
 export function Rock({ rock }: RockProps) {
+  let gameService = useGameService();
   let { x, y, textureName } = rock;
   let texture = useMemo(() => new TextureLoader().load(textureName), [
     textureName
@@ -28,6 +30,7 @@ export function Rock({ rock }: RockProps) {
       ref={mesh}
       rotation={[0, 0, 0]}
       renderOrder={5}
+      onClick={() => (gameService.selectedObject = rock)}
     >
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <meshBasicMaterial
