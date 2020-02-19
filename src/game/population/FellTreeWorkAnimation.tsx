@@ -21,19 +21,17 @@ export function FellTreeWorkAnimation() {
     []
   );
 
-  let positionKeyFrame = useMemo(() => {
-    return new VectorKeyframeTrack(
+  let animationClip = useMemo(() => {
+    let positionKeyFrame = new VectorKeyframeTrack(
       ".position",
       [0, 0.5, 0.65, 0.85, 1],
       [0, 0, 0, -0.05, 0, 0, 0.05, 0, 0, 0.055, 0, 0, 0, 0, 0]
     );
-  }, []);
 
-  let rotationKeyframe = useMemo(() => {
     let axis = new Vector3(0, 0, 1);
     let qInitial = new Quaternion().setFromAxisAngle(axis, 0);
     let qFinal = new Quaternion().setFromAxisAngle(axis, Math.PI / 4);
-    return new QuaternionKeyframeTrack(
+    let rotationKeyframe = new QuaternionKeyframeTrack(
       ".quaternion",
       [0, 0.5, 1],
       [
@@ -51,24 +49,16 @@ export function FellTreeWorkAnimation() {
         qInitial.w
       ]
     );
-  }, []);
-
-  let positionAnimationClip = useMemo(() => {
-    return new AnimationClip("position", 1, [positionKeyFrame]);
-  }, []);
-
-  let rotationAnimationClip = useMemo(() => {
-    return new AnimationClip("rotation", 1, [rotationKeyframe]);
+    return new AnimationClip("work", 1, [rotationKeyframe, positionKeyFrame]);
   }, []);
 
   let mesh = useRef<Object3D>();
   let [mixer, setMixer] = useState();
+
   useEffect(() => {
     let mixer = new AnimationMixer(mesh.current!);
-    let positionClipAction = mixer.clipAction(positionAnimationClip);
-    positionClipAction.play();
-    let rotationClipAction = mixer.clipAction(rotationAnimationClip);
-    rotationClipAction.play();
+    let clipAction = mixer.clipAction(animationClip);
+    clipAction.play();
     setMixer(mixer);
   }, []);
 
