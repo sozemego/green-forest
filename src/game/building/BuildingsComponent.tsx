@@ -42,7 +42,10 @@ export function BuildingComponent({ building }: BuildingComponentProps) {
       ref={mesh}
       rotation={[0, 0, 0]}
       renderOrder={5}
-      onClick={() => (gameService.selectedObject = building)}
+      onClick={e => {
+        e.stopPropagation();
+        gameService.selectedObject = building;
+      }}
     >
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <meshBasicMaterial

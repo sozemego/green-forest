@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { TextureLoader } from "three";
 import { useFrame } from "react-three-fiber";
 import { cloneUniforms } from "three/src/renderers/shaders/UniformsUtils";
+import { PointerEvent } from "react-three-fiber";
 import { WindShader } from "../shaders/WindShader";
 import { Resource } from "./Resource";
 import { ResourceData } from "./ResourceMachine";
@@ -20,7 +21,10 @@ export function Trees({ trees }: TreesProps) {
         y: y + 0.25,
         trees: [],
         resources,
-        onClick: () => (gameService.selectedObject = tree)
+        onClick: e => {
+          e.stopPropagation();
+          gameService.selectedObject = tree;
+        }
       };
       let positions = [
         [-0.25, 0.25],
@@ -74,7 +78,7 @@ function TreeGroup({ group }: TreeGroupProps) {
     <group
       position={[group.x, group.y, 0.1]}
       renderOrder={1}
-      onClick={() => group.onClick()}
+      onClick={e => group.onClick(e)}
     >
       {group.trees.map((tree, index) => (
         <Tree tree={tree} key={index} opacity={opacity} />
@@ -89,7 +93,7 @@ interface GroupProps {
   y: number;
   trees: TreeInGroupProp[];
   resources: Record<string, ResourceData>;
-  onClick: Function;
+  onClick: (e: PointerEvent) => void;
 }
 
 interface TreeInGroupProp {

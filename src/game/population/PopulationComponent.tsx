@@ -50,7 +50,10 @@ export function PopComponent({ pop }: PopProps) {
         ref={mesh}
         rotation={[0, 0, 0]}
         renderOrder={5}
-        onClick={() => (gameService.selectedObject = pop)}
+        onClick={e => {
+          e.stopPropagation();
+          gameService.selectedObject = pop;
+        }}
       >
         <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
         <meshBasicMaterial

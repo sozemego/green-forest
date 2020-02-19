@@ -1,6 +1,16 @@
 import React, { useMemo, useRef } from "react";
-import { Color, Object3D, TextureLoader, VertexColors } from "three";
+import {
+  Color,
+  InstancedMesh,
+  Mesh,
+  Object3D,
+  Texture,
+  TextureLoader,
+  VertexColors
+} from "three";
 import { useFrame } from "react-three-fiber";
+import { gameService } from "./GameMachine";
+import { useGameService } from "./useGameService";
 
 export function Tiles() {
   let sizeX = 100;
@@ -16,7 +26,7 @@ export function Tiles() {
   }, []);
 
   let tileMap = useMemo(() => {
-    let tiles = {};
+    let tiles: Record<string, Tile[]> = {};
     let types = ["d", "c", "l"];
     types.forEach(t => (tiles[t] = []));
     let id = 0;
@@ -25,7 +35,7 @@ export function Tiles() {
         let type = types[Math.floor(Math.random() * types.length)];
         let texture = textures[type === "d" ? 0 : type === "c" ? 1 : 2];
         let key = `${x}:${y}`;
-        let tile = {
+        let tile: Tile = {
           id: id++,
           key,
           x,
@@ -48,8 +58,21 @@ export function Tiles() {
   );
 }
 
-function TileLayer({ tiles }) {
-  let mesh = useRef();
+interface Tile {
+  id: number;
+  key: string;
+  x: number;
+  y: number;
+  texture: Texture;
+}
+
+interface TileLayerProps {
+  tiles: Tile[];
+}
+
+function TileLayer({ tiles }: TileLayerProps) {
+  let gameService = useGameService();
+  let mesh = useRef<InstancedMesh>();
   let attribute = useRef();
   let texture = tiles[0].texture;
 
@@ -79,14 +102,20 @@ function TileLayer({ tiles }) {
       let { x, y } = tile;
       _object.position.set(x, y, 0);
       _object.updateMatrix();
-      mesh.current.setMatrixAt(i, _object.matrix);
+      mesh.current!.setMatrixAt(i, _object.matrix);
     }
-    mesh.current.instanceMatrix.needsUpdate = true;
+    mesh.current!.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <instancedMesh ref={mesh} args={[null, null, tiles.length]}>
+    // @ts-ignore
+    <instancedMesh
+      ref={mesh}
+      args={[null, null, tiles.length]}
+      onClick={() => (gameService.selectedObject = null)}
+    >
       <boxBufferGeometry attach="geometry" args={[1, 1, 0.01]}>
+        // @ts-ignore
         <instancedBufferAttribute
           ref={attribute}
           attachObject={["attributes", "color"]}
@@ -98,6 +127,7 @@ function TileLayer({ tiles }) {
         vertexColors={VertexColors}
         map={texture}
       />
+      // @ts-ignore
     </instancedMesh>
   );
 }
