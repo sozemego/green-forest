@@ -34,6 +34,10 @@ export class Building {
     return this._context.jobs;
   }
 
+  get name() {
+    return this._context.name;
+  }
+
   get _context() {
     return this.service.state.context;
   }

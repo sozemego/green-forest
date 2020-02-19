@@ -13,7 +13,15 @@ export function SelectedObjectUI() {
   let { selectedObject } = gameService;
 
   return (
-    <div>
+    <div
+      style={{
+        width: "250px",
+        minHeight: selectedObject ? "350px" : "0px",
+        background: "white",
+        border: "1px solid gray",
+        borderRadius: "4px"
+      }}
+    >
       {selectedObject instanceof Pop ? (
         <SelectedPopUI pop={selectedObject} />
       ) : null}

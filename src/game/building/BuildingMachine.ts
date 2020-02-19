@@ -23,6 +23,7 @@ export interface Job {
 }
 
 interface BuildingContext {
+  name: string;
   x: number;
   y: number;
   textureName: string;
@@ -47,6 +48,7 @@ let buildingMachine = Machine<BuildingContext, BuildingSchema, BuildingAction>({
   id: "building",
   initial: BUILDING_STATE.IDLE,
   context: {
+    name: "init",
     x: 0,
     y: 0,
     textureName: "init",

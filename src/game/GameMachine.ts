@@ -210,7 +210,10 @@ export type GameActor = Interpreter<GameContext, GameSchema, GameAction>;
 
 export let gameService: GameActor = interpret(gameMachine).start();
 
-export type BuildingData = Pick<Building, "x" | "y" | "textureName" | "jobs">;
+export type BuildingData = Pick<
+  Building,
+  "x" | "y" | "textureName" | "jobs" | "name"
+>;
 
 export function startBuildings(buildings: BuildingData[]) {
   buildings.forEach(building => {
@@ -220,12 +223,14 @@ export function startBuildings(buildings: BuildingData[]) {
 
 export let initialBuildings: BuildingData[] = [
   {
+    name: "Castle",
     x: 50,
     y: 50,
     textureName: "textures/castle_large.png",
     jobs: []
   },
   {
+    name: "Lumberjack",
     x: 47,
     y: 52,
     textureName: "textures/lumberjack.png",
