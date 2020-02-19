@@ -44,7 +44,7 @@ export function Trees({ trees }: TreesProps) {
     }
 
     return groups;
-  }, [trees]);
+  }, [trees, gameService]);
 
   return (
     <>
@@ -114,7 +114,7 @@ export interface TreeProps {
 function Tree({ tree, opacity }: TreeProps) {
   let mesh = useRef();
   let shader = WindShader;
-  let uniforms = React.useMemo(() => cloneUniforms(shader.uniforms), []);
+  let uniforms = React.useMemo(() => cloneUniforms(shader.uniforms), [shader]);
   let time = useRef(0);
   let texture = useMemo(() => new TextureLoader().load(tree.textureName), [
     tree.textureName

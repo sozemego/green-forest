@@ -60,7 +60,7 @@ export function FellTreeWorkAnimation() {
     let clipAction = mixer.clipAction(animationClip);
     clipAction.play();
     setMixer(mixer);
-  }, []);
+  }, [animationClip]);
 
   useFrame(() => {
     if (!mixer) {

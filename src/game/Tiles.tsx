@@ -2,14 +2,12 @@ import React, { useMemo, useRef } from "react";
 import {
   Color,
   InstancedMesh,
-  Mesh,
   Object3D,
   Texture,
   TextureLoader,
   VertexColors
 } from "three";
 import { useFrame } from "react-three-fiber";
-import { gameService } from "./GameMachine";
 import { useGameService } from "./useGameService";
 
 export function Tiles() {
