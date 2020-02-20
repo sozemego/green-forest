@@ -3,7 +3,7 @@ import { SelectedObjectUI } from "./SelectedObjectUI";
 
 export function GameUI() {
   return (
-    <div style={{ pointerEvents: "all" }}>
+    <div style={{ pointerEvents: "all", width: "auto" }}>
       <SelectedObjectUI />
     </div>
   );

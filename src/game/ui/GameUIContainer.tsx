@@ -6,7 +6,6 @@ export function GameUIContainer({ children }: GameUIProps) {
     <div
       style={{
         position: "relative",
-        width: "100%",
         height: "100%",
         pointerEvents: "none"
       }}
@@ -27,9 +26,7 @@ export function GameUIContainer({ children }: GameUIProps) {
         style={{
           position: "absolute",
           left: 0,
-          top: 0,
-          width: "100%",
-          height: "100%"
+          top: 0
         }}
       >
         <GameUI />
