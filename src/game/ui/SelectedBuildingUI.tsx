@@ -47,6 +47,7 @@ export function SelectedBuildingUI({ building }: SelectedBuildingUIProps) {
                 <img
                   src={worker?.textureName}
                   style={{ width: "48px", height: "48px" }}
+                  alt={`Worker texture`}
                 />
               </div>
             )}
