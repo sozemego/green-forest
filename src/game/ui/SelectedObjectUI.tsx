@@ -19,7 +19,8 @@ export function SelectedObjectUI() {
         minHeight: selectedObject ? "350px" : "0px",
         background: "white",
         border: "1px solid gray",
-        borderRadius: "4px"
+        borderRadius: "4px",
+        padding: "8px"
       }}
     >
       {selectedObject instanceof Pop ? (

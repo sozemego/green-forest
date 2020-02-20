@@ -5,6 +5,7 @@ import { Resource } from "./resource/Resource";
 import { buildingMachine } from "./building/BuildingMachine";
 import { resourceMachine } from "./resource/ResourceMachine";
 import { popMachine } from "./population/PopMachine";
+import { GameService } from "./GameService";
 
 export let GAME_STATE = {
   NOT_STARTED: "NOT_STARTED",
@@ -251,6 +252,8 @@ export function addPops(pops: PopData[]) {
 
 export function addPop(pop: PopData) {
   gameService.send({ type: GAME_ACTION.ADD_POP, pop });
+  let service = new GameService(gameService);
+  service.selectedObject = service.population[service.population.length - 1];
 }
 
 export type PopData = Pick<Pop, "x" | "y" | "textureName" | "job">;
