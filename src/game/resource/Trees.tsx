@@ -27,16 +27,17 @@ export function Trees({ trees }: TreesProps) {
         }
       };
       let positions = [
-        [-0.25, 0.25],
-        [0.25, 0.25],
-        [0, 0],
-        [-0.25, -0.25],
-        [0.25, -0.25]
+        [-0.25, 0.25, 0.05],
+        [0.25, 0.25, 0.05],
+        [0, 0, 0.1],
+        [-0.25, -0.25, 0.15],
+        [0.25, -0.25, 0.15]
       ];
       for (let i = 0; i < 5; i++) {
         group.trees.push({
           x: positions[i][0],
           y: positions[i][1],
+          z: positions[i][2],
           textureName
         });
       }
@@ -99,6 +100,7 @@ interface GroupProps {
 interface TreeInGroupProp {
   x: number;
   y: number;
+  z: number;
   textureName: string;
 }
 
@@ -140,7 +142,7 @@ function Tree({ tree, opacity }: TreeProps) {
   });
 
   return (
-    <mesh position={[tree.x, tree.y, 0.0]} ref={mesh} rotation={[0, 0, 0]}>
+    <mesh position={[tree.x, tree.y, tree.z]} ref={mesh} rotation={[0, 0, 0]}>
       <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
       <shaderMaterial
         args={[
