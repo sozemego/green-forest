@@ -252,8 +252,6 @@ export function addPops(pops: PopData[]) {
 
 export function addPop(pop: PopData) {
   gameService.send({ type: GAME_ACTION.ADD_POP, pop });
-  let service = new GameService(gameService);
-  service.selectedObject = service.population[service.population.length - 1];
 }
 
 export type PopData = Pick<Pop, "x" | "y" | "textureName" | "job">;
