@@ -44,7 +44,7 @@ export function PopComponent({ pop }: PopProps) {
   let jobProgress = Math.max(0.0001, job ? job.progress : 1);
 
   return (
-    <group position={[x, y, 0.01]}>
+    <group position={[x, y, 0.3]}>
       <mesh
         position={[0, 0, 0]}
         ref={mesh}
@@ -61,7 +61,7 @@ export function PopComponent({ pop }: PopProps) {
           map={texture}
           opacity={1}
           transparent={true}
-          // alphaTest={0.75}
+          alphaTest={0.75}
         />
       </mesh>
       <mesh
