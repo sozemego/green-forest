@@ -21,7 +21,7 @@ export function BuildingsComponent() {
 export function BuildingComponent({ building }: BuildingComponentProps) {
   useService(building.service);
   let gameService = useGameService();
-  let { x, y, textureName } = building;
+  let { x, y, width, height, textureName } = building;
 
   let mesh = useRef();
   let time = useRef(0);
@@ -47,7 +47,7 @@ export function BuildingComponent({ building }: BuildingComponentProps) {
         gameService.selectedObject = building;
       }}
     >
-      <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
+      <planeBufferGeometry args={[width, height, 1]} attach={"geometry"} />
       <meshBasicMaterial
         attach={"material"}
         map={texture}

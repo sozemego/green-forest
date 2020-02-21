@@ -30,6 +30,14 @@ export class Resource {
     return this._context.y;
   }
 
+  get width() {
+    return this._context.width;
+  }
+
+  get height() {
+    return this._context.height;
+  }
+
   get type() {
     return this._context.type;
   }

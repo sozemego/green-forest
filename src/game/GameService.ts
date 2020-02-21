@@ -1,4 +1,5 @@
 import { GAME_ACTION, GameActor } from "./GameMachine";
+import { HasPosition, HasWidth } from "./util";
 
 export class GameService {
   private readonly actor: GameActor;
@@ -15,7 +16,7 @@ export class GameService {
     return this._context.selectedObject;
   }
 
-  set selectedObject(object: any | null) {
+  set selectedObject(object: (HasPosition & HasWidth) | null) {
     this.actor.send({ type: GAME_ACTION.SELECT_OBJECT, object });
   }
 

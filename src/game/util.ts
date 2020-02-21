@@ -8,3 +8,8 @@ export interface HasPosition {
   x: number;
   y: number;
 }
+
+export interface HasWidth {
+  width: number;
+  height: number;
+}

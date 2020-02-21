@@ -19,7 +19,7 @@ export interface RocksProps {
 
 export function Rock({ rock }: RockProps) {
   let gameService = useGameService();
-  let { x, y, textureName } = rock;
+  let { x, y, width, height, textureName } = rock;
   let texture = useMemo(() => new TextureLoader().load(textureName), [
     textureName
   ]);
@@ -32,7 +32,7 @@ export function Rock({ rock }: RockProps) {
       renderOrder={5}
       onClick={() => (gameService.selectedObject = rock)}
     >
-      <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
+      <planeBufferGeometry args={[width, height, 1]} attach={"geometry"} />
       <meshBasicMaterial
         attach={"material"}
         map={texture}

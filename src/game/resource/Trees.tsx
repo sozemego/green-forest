@@ -14,7 +14,7 @@ export function Trees({ trees }: TreesProps) {
     let groups = [];
     for (let i = 0; i < trees.length; i++) {
       let tree = trees[i];
-      let { x, y, textureName, resources } = tree;
+      let { x, y, width, height, textureName, resources } = tree;
       let group: GroupProps = {
         id: tree.id,
         x,
@@ -38,6 +38,8 @@ export function Trees({ trees }: TreesProps) {
           x: positions[i][0],
           y: positions[i][1],
           z: positions[i][2],
+          width,
+          height,
           textureName
         });
       }
@@ -101,6 +103,8 @@ interface TreeInGroupProp {
   x: number;
   y: number;
   z: number;
+  width: number;
+  height: number;
   textureName: string;
 }
 
@@ -143,7 +147,10 @@ function Tree({ tree, opacity }: TreeProps) {
 
   return (
     <mesh position={[tree.x, tree.y, tree.z]} ref={mesh} rotation={[0, 0, 0]}>
-      <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
+      <planeBufferGeometry
+        args={[tree.width, tree.height, 1]}
+        attach={"geometry"}
+      />
       <shaderMaterial
         args={[
           {

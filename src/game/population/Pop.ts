@@ -171,6 +171,14 @@ export class Pop {
     return this._context.y;
   }
 
+  get width() {
+    return this._context.width;
+  }
+
+  get height() {
+    return this._context.height;
+  }
+
   get textureName() {
     return this._context.textureName;
   }

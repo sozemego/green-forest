@@ -14,6 +14,8 @@ export interface ResourceContext {
   id: string;
   x: number;
   y: number;
+  width: number;
+  height: number;
   textureName: string;
   type: string;
   resources: Record<string, ResourceData>;
@@ -56,6 +58,8 @@ export let resourceMachine = Machine<
     id: "initial",
     x: 0,
     y: 0,
+    width: 0,
+    height: 0,
     textureName: "textureName",
     type: "type",
     resources: {}

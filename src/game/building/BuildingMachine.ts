@@ -26,6 +26,8 @@ interface BuildingContext {
   name: string;
   x: number;
   y: number;
+  width: number;
+  height: number;
   textureName: string;
   jobs: Job[];
 }
@@ -51,6 +53,8 @@ let buildingMachine = Machine<BuildingContext, BuildingSchema, BuildingAction>({
     name: "init",
     x: 0,
     y: 0,
+    width: 0,
+    height: 0,
     textureName: "init",
     jobs: []
   },

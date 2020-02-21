@@ -98,6 +98,8 @@ interface PopContext {
   id: string;
   x: number;
   y: number;
+  width: number;
+  height: number;
   textureName: string;
   job: PopJob | null;
   target: HasPosition | null;
@@ -133,6 +135,8 @@ let popMachine = Machine<PopContext, PopSchema, PopAction>({
     id: "init",
     x: 0,
     y: 0,
+    width: 0,
+    height: 0,
     textureName: "init.png",
     job: null,
     target: null

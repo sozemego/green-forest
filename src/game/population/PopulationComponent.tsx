@@ -24,7 +24,7 @@ export function PopulationComponent() {
 export function PopComponent({ pop }: PopProps) {
   useService(pop.service);
   let gameService = useGameService();
-  let { x, y, textureName, job, state } = pop;
+  let { x, y, width, height, textureName, job, state } = pop;
 
   let mesh = useRef();
 
@@ -55,7 +55,7 @@ export function PopComponent({ pop }: PopProps) {
           gameService.selectedObject = pop;
         }}
       >
-        <planeBufferGeometry args={[1, 1, 1]} attach={"geometry"} />
+        <planeBufferGeometry args={[width, height, 1]} attach={"geometry"} />
         <meshBasicMaterial
           attach={"material"}
           map={texture}

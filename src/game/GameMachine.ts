@@ -5,7 +5,7 @@ import { Resource } from "./resource/Resource";
 import { buildingMachine } from "./building/BuildingMachine";
 import { resourceMachine } from "./resource/ResourceMachine";
 import { popMachine } from "./population/PopMachine";
-import { GameService } from "./GameService";
+import { HasPosition, HasWidth } from "./util";
 
 export let GAME_STATE = {
   NOT_STARTED: "NOT_STARTED",
@@ -38,7 +38,7 @@ export interface GameContext {
   resources: Resource[];
   buildings: Building[];
   population: Pop[];
-  selectedObject: any | null;
+  selectedObject: (HasPosition & HasWidth) | null;
 }
 
 type GameStartAction = {
@@ -71,7 +71,7 @@ type GamePopulationAddPopAction = {
 
 type GameSelectObjectAction = {
   type: typeof GAME_ACTION.SELECT_OBJECT;
-  object: any | null;
+  object: (HasPosition & HasWidth) | null;
 };
 
 type GameAction =
@@ -213,7 +213,7 @@ export let gameService: GameActor = interpret(gameMachine).start();
 
 export type BuildingData = Pick<
   Building,
-  "x" | "y" | "textureName" | "jobs" | "name"
+  "x" | "y" | "width" | "height" | "textureName" | "jobs" | "name"
 >;
 
 export function startBuildings(buildings: BuildingData[]) {
@@ -227,6 +227,8 @@ export let initialBuildings: BuildingData[] = [
     name: "Castle",
     x: 50,
     y: 50,
+    width: 1,
+    height: 1,
     textureName: "textures/castle_large.png",
     jobs: []
   },
@@ -234,6 +236,8 @@ export let initialBuildings: BuildingData[] = [
     name: "Lumberjack",
     x: 47,
     y: 52,
+    width: 1,
+    height: 1,
     textureName: "textures/lumberjack.png",
     jobs: [
       {
@@ -254,12 +258,17 @@ export function addPop(pop: PopData) {
   gameService.send({ type: GAME_ACTION.ADD_POP, pop });
 }
 
-export type PopData = Pick<Pop, "x" | "y" | "textureName" | "job">;
+export type PopData = Pick<
+  Pop,
+  "x" | "y" | "width" | "height" | "textureName" | "job"
+>;
 
 export let initialPops: PopData[] = [
   {
     x: 54.5,
     y: 48.0,
+    width: 0.25 * 0.6875,
+    height: 0.25,
     textureName: "textures/hauler.png",
     job: null
   }
@@ -280,13 +289,15 @@ export function startResources(resources: ResourceData[]) {
 
 export type ResourceData = Pick<
   Resource,
-  "x" | "y" | "textureName" | "type" | "resources"
+  "x" | "y" | "width" | "height" | "textureName" | "type" | "resources"
 >;
 
 export let initialResources: ResourceData[] = [
   {
     x: 5,
     y: 15,
+    width: 1,
+    height: 1,
     textureName: "textures/tree.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -294,6 +305,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 50,
     y: 45,
+    width: 1,
+    height: 1,
     textureName: "textures/tree.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -301,6 +314,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 51,
     y: 42,
+    width: 1,
+    height: 1,
     textureName: "textures/tree.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -308,6 +323,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 48,
     y: 55,
+    width: 1,
+    height: 1,
     textureName: "textures/tree_1.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -315,6 +332,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 49,
     y: 49,
+    width: 1,
+    height: 1,
     textureName: "textures/tree.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -322,6 +341,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 50,
     y: 55,
+    width: 1,
+    height: 1,
     textureName: "textures/tree_1.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -329,6 +350,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 49,
     y: 45,
+    width: 1,
+    height: 1,
     textureName: "textures/tree_1.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -336,6 +359,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 40,
     y: 40,
+    width: 1,
+    height: 1,
     textureName: "textures/tree_1.png",
     type: "tree",
     resources: { wood: { max: 50, count: 50 } }
@@ -343,6 +368,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 25,
     y: 25,
+    width: 1,
+    height: 1,
     textureName: "textures/stone.png",
     type: "stone",
     resources: {}
@@ -350,6 +377,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 38,
     y: 58,
+    width: 1,
+    height: 1,
     textureName: "textures/stone.png",
     type: "stone",
     resources: {}
@@ -357,6 +386,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 55,
     y: 40,
+    width: 1,
+    height: 1,
     textureName: "textures/stone.png",
     type: "stone",
     resources: {}
@@ -364,6 +395,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 56,
     y: 45,
+    width: 1,
+    height: 1,
     textureName: "textures/stone.png",
     type: "stone",
     resources: {}
@@ -371,6 +404,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 40,
     y: 40,
+    width: 1,
+    height: 1,
     textureName: "textures/stone.png",
     type: "stone",
     resources: {}
@@ -378,6 +413,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 48,
     y: 45,
+    width: 1,
+    height: 1,
     textureName: "textures/stone.png",
     type: "stone",
     resources: {}
@@ -385,6 +422,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 52,
     y: 52,
+    width: 1,
+    height: 1,
     textureName: "textures/iron.png",
     type: "iron",
     resources: {}
@@ -392,6 +431,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 55,
     y: 50,
+    width: 1,
+    height: 1,
     textureName: "textures/iron.png",
     type: "iron",
     resources: {}
@@ -399,6 +440,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 68,
     y: 45,
+    width: 1,
+    height: 1,
     textureName: "textures/iron.png",
     type: "iron",
     resources: {}
@@ -406,6 +449,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 68,
     y: 52,
+    width: 1,
+    height: 1,
     textureName: "textures/iron.png",
     type: "iron",
     resources: {}
@@ -413,6 +458,8 @@ export let initialResources: ResourceData[] = [
   {
     x: 45,
     y: 49,
+    width: 1,
+    height: 1,
     textureName: "textures/iron.png",
     type: "iron",
     resources: {}

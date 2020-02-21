@@ -16,6 +16,7 @@ import {
   initialBuildings,
   startBuildings
 } from "./GameMachine";
+import { SelectedObjectRectangle } from "./SelectedObjectRectangle";
 
 export function Game() {
   useEffect(() => {
@@ -38,6 +39,7 @@ export function Game() {
         <Resources />
         <BuildingsComponent />
         <PopulationComponent />
+        <SelectedObjectRectangle />
       </Canvas>
     </GameUIContainer>
   );
