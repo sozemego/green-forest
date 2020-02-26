@@ -166,9 +166,26 @@ let gameMachine = Machine<GameContext, GameSchema, GameAction>({
           let resources = [...context.resources];
           let index = resources.findIndex(resource => resource.id === event.id);
           if (index > -1) {
+            let resource = resources[index];
+            if (context.selectedObject === resource) {
+            }
             resources.splice(index, 1);
           }
           return resources;
+        },
+        selectedObject: (context, event: GameRemoveResourceAction) => {
+          if (!context.selectedObject) {
+            return null;
+          }
+          let resources = [...context.resources];
+          let index = resources.findIndex(resource => resource.id === event.id);
+          if (index > -1) {
+            let resource = resources[index];
+            if (context.selectedObject === resource) {
+              return null;
+            }
+          }
+          return context.selectedObject;
         }
       })
     },
