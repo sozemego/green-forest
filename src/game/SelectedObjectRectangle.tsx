@@ -29,7 +29,7 @@ function Rectangle({ selectedObject }: RectangleProps) {
   );
 
   return (
-    <lineLoop position={[x, y, 0.5]}>
+    <lineLoop position={[x, y, 0.1]}>
       <primitive object={geometry} attach={"geometry"} />
       <lineBasicMaterial attach={"material"} linewidth={1.25} color={"gold"} />
     </lineLoop>
