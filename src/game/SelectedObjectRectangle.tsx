@@ -1,12 +1,6 @@
 import { useGameService } from "./useGameService";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import {
-  AnimationClip,
-  AnimationMixer,
-  Geometry,
-  Shape,
-  VectorKeyframeTrack
-} from "three";
+import { AnimationLoader, AnimationMixer, Geometry, Shape } from "three";
 import { HasPosition, HasWidth } from "./util";
 import { useFrame } from "react-three-fiber";
 import { DELTA } from "./Constants";
@@ -38,48 +32,25 @@ function Rectangle({ selectedObject }: RectangleProps) {
     [shape]
   );
 
-  let animationClip = useMemo(() => {
-    let scaleKeyFrame = new VectorKeyframeTrack(
-      ".scale",
-      [0, 0.1, 0.25, 0.5, 0.6, 0.75, 0.9, 1],
-      [
-        1,
-        1,
-        1,
-        1.05,
-        1.05,
-        1,
-        1.1,
-        1.1,
-        1,
-        1.15,
-        1.15,
-        1,
-        1.2,
-        1.2,
-        1,
-        1.15,
-        1.15,
-        1,
-        1.05,
-        1.05,
-        1,
-        1,
-        1,
-        1
-      ]
+  let [animationClip, setAnimationClip] = useState();
+
+  useEffect(() => {
+    new AnimationLoader().load("animations/selectedRectangle.json", result =>
+      setAnimationClip(result[0])
     );
-    return new AnimationClip("work", 1, [scaleKeyFrame]);
   }, []);
 
   let [mixer, setMixer] = useState();
 
   useEffect(() => {
+    if (!animationClip) {
+      return;
+    }
     let mixer = new AnimationMixer(line.current!);
     let clipAction = mixer.clipAction(animationClip);
     clipAction.play();
     setMixer(mixer);
-  }, []);
+  }, [animationClip]);
 
   useFrame(() => {
     if (!mixer) {
